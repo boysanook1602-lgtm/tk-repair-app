@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>T&K Professional Billing</title>
     <style>
-        /* CSS ตัวเดี่ยวจบในไฟล์ ไม่ดึงจากเน็ตเพื่อความเร็วสูงสุด */
+        /* CSS ตัวเดี่ยวจบในไฟล์ โหลดไว ไม่ดึงจากเน็ต */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         body {
@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* เอฟเฟกต์อนิเมะ Matrix Glow บิลค่อยๆ เรืองแสงและขยายตัวขึ้นตอนเปิด */
+        /* เอฟเฟกต์อนิเมะ Matrix Glow ตอนเปิดตัว */
         .app-container {
             width: 100%;
             max-width: 500px;
@@ -42,7 +42,7 @@
         .logo-sub { font-size: 10px; color: #708090; tracking: 1px; text-transform: uppercase; margin-top: 2px; }
         .tagline { font-size: 11px; background: rgba(0, 242, 254, 0.1); color: #00f2fe; display: inline-block; padding: 3px 10px; border-radius: 10px; margin-top: 6px; border: 1px solid rgba(0, 242, 254, 0.2); }
 
-        /* จัดฟอร์มแบ่งโซนสวยงาม */
+        /* จัดฟอร์มแบ่งโซน */
         .card-section {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 14px;
@@ -74,12 +74,18 @@
             background: #050b14;
         }
 
+        /* แก้ไขบั๊กอินพุตวันที่ของแอนดรอยด์/iOS กลืนกับพื้นหลัง */
+        input[type="date"] {
+            color-scheme: dark;
+            color: #fff;
+        }
+
         /* ตารางรายการแบบการ์ด เพื่อให้เหมาะกับมือถือ */
         .item-row-card {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
             border-left: 3px solid #00f2fe;
             position: relative;
         }
@@ -90,9 +96,10 @@
         .btn-delete {
             position: absolute; right: 10px; top: 8px;
             background: none; border: none; color: #ef4444; font-size: 12px; cursor: pointer;
+            font-weight: bold; padding: 4px;
         }
 
-        /* เอฟเฟกต์ปุ่มกดสไตล์ชาร์จพลังอนิเมะ (Anime Power Charge) */
+        /* เอฟเฟกต์ปุ่มกดอนิเมะ */
         .btn-primary {
             width: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe);
             color: #000; border: none; border-radius: 10px; padding: 12px;
@@ -106,25 +113,28 @@
             width: 100%; background: #1e293b; color: #cbd5e1;
             border: none; border-radius: 10px; padding: 10px; margin-top: 8px;
             font-size: 13px; cursor: pointer; transition: all 0.2s;
+            font-weight: 600;
         }
         .btn-secondary:active { background: #334155; }
 
         /* สรุปยอดเงิน */
-        .summary-box { display: flex; flex-direction: column; gap: 6px; margin-top: 15px; padding-top: 12px; border-t: 1px dashed rgba(255,255,255,0.1); }
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #94a3b8; }
-        .total-row { font-size: 18px; color: #ffbc00; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 4px; }
+        .summary-box { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #94a3b8; }
+        .total-row { font-size: 18px; color: #ffbc00; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: 4px; }
 
-        /* สไตล์หน้าพิมพ์เอกสาร บังคับตัดเป็นขาวดำสวยเป็นระเบียบ */
+        /* สไตล์หน้าพิมพ์เอกสาร สลับเป็นขาวดำตอนกด Print อัตโนมัติ */
         @media print {
             body { background: #fff !important; color: #000 !important; padding: 0; }
             .no-print { display: none !important; }
             .app-container { max-width: 100%; border: none !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
             input, select { border: none !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; appearance: none; }
+            input[type="date"] { color-scheme: light; color: #000 !important; }
             .card-section { background: none !important; border: 1px solid #000 !important; }
-            .item-row-card { border: 1px solid #ccc !important; background: none !important; color: #000 !important; }
+            .item-row-card { border: 1px solid #ccc !important; background: none !important; color: #000 !important; border-left: 5px solid #000 !important; }
             .logo-title { color: #000 !important; text-shadow: none !important; }
             .tagline { border: 1px solid #000 !important; color: #000 !important; background: none !important; }
             .total-row { color: #000 !important; }
+            #inputDiscount { border: none !important; text-align: right; }
         }
     </style>
 </head>
@@ -165,7 +175,9 @@
                     <option value="" disabled selected>เลือกอำเภอ (ในสุรินทร์)</option>
                     <option>เมืองสุรินทร์</option><option>สังขะ</option><option>ปราสาท</option>
                     <option>ท่าตูม</option><option>ศีขรภูมิ</option><option>รัตนบุรี</option>
-                    <option>จอมพระ</option><option>กาบเชิง</option><option>อื่นๆ</option>
+                    <option>จอมพระ</option><option>กาบเชิง</option><option>ชุมพลบุรี</option>
+                    <option>สนม</option><option>สำโรงทาบ</option><option>บัวเชด</option>
+                    <option>ลำดวน</option><option>อื่นๆ</option>
                 </select>
             </div>
         </div>
@@ -206,16 +218,3 @@
                         <div class="price-box">
                             <label>ราคา (บาท)</label>
                             <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" class="btn-secondary no-print" onclick="addItemRow()">+ เพิ่มรายการอะไหล่/ค่าบริการ</button>
-        </div>
-
-        <!-- Summary -->
-        <div class="card-section">
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span>รวมเงิน (Sub Total)</span>
