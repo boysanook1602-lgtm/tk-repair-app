@@ -19,31 +19,52 @@
         .form-group label { display: block; font-size: 11px; color: #475569; margin-bottom: 3px; font-weight: 600; }
         
         /* ช่องกรอกข้อมูล ตัวหนังสือสีดำเข้มคมชัด 100% ไม่จมหาย */
-        input, select { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; color: #000000 !important; font-size: 14px; font-weight: 500; appearance: none; -webkit-appearance: none; }
+        input, select { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; color: #000000 !important; font-size: 14px; font-weight: 500; appearance: none; }
         input:focus, select:focus { outline: none; border-color: #0284c7; }
         
         /* แถวรายการซ่อมแบบแบ่งครึ่งจอ 50/50 ป้องกันราคาตกขอบ */
         .item-row-card { background: #ffffff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #cbd5e1; position: relative; }
         .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
         .btn-delete { position: absolute; right: 8px; top: 8px; background: #fee2e2; border: none; color: #dc2626; font-size: 10px; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+        .btn-delete:hover { background: #fca5a5; }
         
         /* ปุ่มคำสั่งต่างๆ */
-        .btn-primary { width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
+        .btn-primary { width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); transition: all 0.3s ease; }
+        .btn-primary:hover { background: #0369a1; transform: translateY(-2px); }
         .btn-primary:active { transform: scale(0.96); background: #0369a1; }
         .btn-secondary { width: 100%; background: #ffffff; color: #0284c7; border: 1px solid #0284c7; border-radius: 8px; padding: 8px; margin-top: 4px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-secondary:hover { background: #e0f2fe; }
         
         .summary-box { display: flex; flex-direction: column; gap: 6px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #334155; }
+        .summary-row input { width: 80px; padding: 5px; margin: 0; }
         .total-row { font-size: 18px; color: #b45309; font-weight: 800; border-top: 2px solid #e2e8f0; padding-top: 6px; }
 
         /* หน้าต่างป๊อปอัพสลิปใบเสร็จ */
-        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start; padding: 12px; overflow-y: auto; }
-        .modal-content { background: #ffffff; padding: 16px; border-radius: 12px; width: 100%; max-width: 400px; margin: auto; }
+        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start; padding: 20px; overflow-y: auto; }
+        .modal-content { background: #ffffff; padding: 16px; border-radius: 12px; width: 100%; max-width: 400px; margin: auto; color: #000000; }
         .close-modal-btn { background: #dc2626; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .close-modal-btn:hover { background: #b91c1c; }
         
         .receipt-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
-        .receipt-table th { background: #f1f5f9; padding: 6px; border: 1px solid #cbd5e1; text-align: left; color: #000; }
+        .receipt-table th { background: #f1f5f9; padding: 6px; border: 1px solid #cbd5e1; text-align: left; color: #000; font-weight: 600; }
         .receipt-table td { padding: 6px; border: 1px solid #cbd5e1; color: #000; }
+        .receipt-table .text-right { text-align: right; }
+        
+        .receipt-divider { border-top: 2px solid #cbd5e1; margin: 8px 0; }
+        .receipt-summary { font-size: 12px; margin: 8px 0; }
+        .receipt-summary-row { display: flex; justify-content: space-between; margin: 4px 0; }
+        .receipt-total { font-size: 16px; font-weight: 800; color: #b45309; text-align: right; margin-top: 8px; }
+        
+        .print-button { background: #10b981; color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .print-button:hover { background: #059669; }
+        
+        @media print {
+            body { background: white; }
+            .preview-modal { background: white; display: block !important; position: static; }
+            .modal-content { box-shadow: none; border: none; }
+            .close-modal-btn, .print-button { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -131,7 +152,7 @@
         <div class="card-section">
             <div class="summary-box">
                 <div class="summary-row"><span>รวมเงิน (Sub Total)</span><span id="txtSubTotal" style="font-weight: 600;">0.00 บาท</span></div>
-                <div class="summary-row"><span>ส่วนลด (Discount)</span><input type="number" id="inputDiscount" value="0" min="0" oninput="calculateTotal()" style="width: 100px; padding: 5px; text-align: right;"></div>
+                <div class="summary-row"><span>ส่วนลด (Discount)</span><input type="number" id="inputDiscount" value="0" min="0" oninput="calculateTotal()" style="width: 100px; padding: 5px;"></div>
                 <div class="summary-row total-row"><span>ยอดสุทธิที่ต้องจ่าย</span><span id="txtGrandTotal">0.00 บาท</span></div>
             </div>
         </div>
@@ -143,7 +164,7 @@
 
     <!-- หน้าจอป๊อปอัพสลิปใบเสร็จตัวจริง -->
     <div id="previewModal" class="preview-modal">
-        <div class="modal-content" style="color: #000000;">
+        <div class="modal-content">
             <div style="text-align:center; margin-bottom:10px;">
                 <h2 style="font-size:24px; color:#0284c7; margin:0;">T&K</h2>
                 <span style="font-size:9px; font-weight:bold; color:#475569; display:block;">ELECTRICAL APPLIANCE REPAIR CENTER</span>
@@ -153,3 +174,220 @@
             <h3 style="background:#0284c7; color:#fff; text-align:center; padding:4px; font-size:14px; margin-bottom:10px; border-radius:4px;">ใบเสร็จรับเงิน / ใบแจ้งหนี้</h3>
             
             <!-- โซนแสดงข้อมูลข้อความผู้ใช้ -->
+            <div style="font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">
+                <div style="margin-bottom: 4px;"><strong>เลขที่บิล:</strong> <span id="rcptBillNo"></span></div>
+                <div style="margin-bottom: 4px;"><strong>วันที่:</strong> <span id="rcptBillDate"></span></div>
+            </div>
+
+            <!-- ข้อมูลลูกค้า -->
+            <div style="font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">
+                <div style="margin-bottom: 3px;"><strong>ชื่อลูกค้า:</strong> <span id="rcptCustName"></span></div>
+                <div style="margin-bottom: 3px;"><strong>เบอร์โทร:</strong> <span id="rcptCustPhone"></span></div>
+                <div style="margin-bottom: 3px;"><strong>อำเภอ:</strong> <span id="rcptCustDistrict"></span></div>
+            </div>
+
+            <!-- ข้อมูลตัวเครื่อง -->
+            <div style="font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">
+                <div style="margin-bottom: 3px;"><strong>ประเภท:</strong> <span id="rcptDeviceType"></span></div>
+                <div style="margin-bottom: 3px;"><strong>ยี่ห้อ/รุ่น:</strong> <span id="rcptDeviceModel"></span></div>
+                <div style="margin-bottom: 3px;"><strong>อาการเสีย:</strong> <span id="rcptDeviceSymptom"></span></div>
+            </div>
+
+            <!-- ตารางรายการซ่อม -->
+            <div style="margin-bottom: 10px;">
+                <h4 style="font-size: 12px; margin-bottom: 6px; color: #0284c7; font-weight: 600;">รายการซ่อม/อะไหล่</h4>
+                <table class="receipt-table">
+                    <thead>
+                        <tr>
+                            <th>รายการ</th>
+                            <th style="text-align: center;">จำนวน</th>
+                            <th style="text-align: right;">ราคา</th>
+                            <th style="text-align: right;">รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rcptItemsTable">
+                        <!-- Items will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- สรุปเงิน -->
+            <div class="receipt-summary">
+                <div class="receipt-summary-row">
+                    <span>รวมเงิน (Sub Total):</span>
+                    <span id="rcptSubTotal" style="font-weight: 600;">0.00 บาท</span>
+                </div>
+                <div class="receipt-summary-row">
+                    <span>ส่วนลด (Discount):</span>
+                    <span id="rcptDiscount" style="font-weight: 600;">0.00 บาท</span>
+                </div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-summary-row" style="font-size: 16px; font-weight: 800; color: #b45309;">
+                    <span>ยอดสุทธิ:</span>
+                    <span id="rcptGrandTotal">0.00 บาท</span>
+                </div>
+            </div>
+
+            <!-- ส่วนท้ายเอกสาร -->
+            <div style="text-align: center; font-size: 10px; color: #64748b; margin-top: 12px; padding-top: 10px; border-top: 1px solid #cbd5e1;">
+                <p style="margin: 4px 0;">ขอบคุณที่ใช้บริการ T&K Electrical Repair</p>
+                <p style="margin: 4px 0;">Thank you for using our service</p>
+                <p style="margin: 4px 0; font-weight: 600;">สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้</p>
+            </div>
+
+            <button type="button" class="print-button" onclick="window.print()">🖨️ พิมพ์ใบเสร็จ</button>
+            <button type="button" class="close-modal-btn" onclick="closePreviewModal()">ปิด</button>
+        </div>
+    </div>
+
+    <script>
+        // ตั้งค่าวันที่ปัจจุบันเมื่อโหลดหน้า
+        window.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('billDate').value = today;
+        });
+
+        // ฟังก์ชันเพิ่มรายการซ่อมใหม่
+        function addItemRow() {
+            const container = document.getElementById('itemsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'item-row-card';
+            newRow.innerHTML = `
+                <button type="button" class="btn-delete" onclick="this.parentElement.remove(); calculateTotal();">ลบ</button>
+                <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
+                <input type="text" placeholder="เช่น เปลี่ยนแคป, ค่าล้างแอร์ด่วน" class="item-name">
+                <div class="item-grid">
+                    <div>
+                        <label>จำนวน</label>
+                        <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
+                    </div>
+                    <div>
+                        <label>ราคา (บาท)</label>
+                        <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newRow);
+            calculateTotal();
+        }
+
+        // ฟังก์ชันคำนวณรวมเงิน
+        function calculateTotal() {
+            const items = document.querySelectorAll('.item-row-card');
+            let subTotal = 0;
+
+            items.forEach(item => {
+                const qty = parseFloat(item.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                subTotal += qty * price;
+            });
+
+            const discount = parseFloat(document.getElementById('inputDiscount').value) || 0;
+            const grandTotal = subTotal - discount;
+
+            // อัปเดตการแสดงผล
+            document.getElementById('txtSubTotal').textContent = formatCurrency(subTotal);
+            document.getElementById('txtGrandTotal').textContent = formatCurrency(grandTotal);
+        }
+
+        // ฟังก์ชันจัดรูปแบบเงิน
+        function formatCurrency(value) {
+            return value.toFixed(2) + ' บาท';
+        }
+
+        // ฟังก์ชันแสดงใบเสร็จ
+        function processInvoiceNow() {
+            // ตรวจสอบข้อมูลที่จำเป็น
+            const custName = document.getElementById('custName').value.trim();
+            const custPhone = document.getElementById('custPhone').value.trim();
+            const deviceType = document.getElementById('deviceType').value;
+            const billNo = document.getElementById('billNo').value.trim();
+
+            if (!custName || !custPhone || !billNo) {
+                alert('⚠️ กรุณากรอกข้อมูลลูกค้า เลขที่บิล และเบอร์โทรศัพท์ให้ครบ');
+                return;
+            }
+
+            const items = document.querySelectorAll('.item-row-card');
+            if (items.length === 0) {
+                alert('⚠️ กรุณาเพิ่มรายการซ่อม/อะไหล่อย่างน้อย 1 รายการ');
+                return;
+            }
+
+            // เตรียมข้อมูลสำหรับใบเสร็จ
+            const billDate = document.getElementById('billDate').value;
+            const custDistrict = document.getElementById('custDistrict').value;
+            const deviceModel = document.getElementById('deviceModel').value;
+            const deviceSymptom = document.getElementById('deviceSymptom').value;
+            const discount = parseFloat(document.getElementById('inputDiscount').value) || 0;
+
+            // แปลงวันที่เป็นรูปแบบไทย
+            const dateObj = new Date(billDate + 'T00:00:00');
+            const thaiDate = dateObj.toLocaleDateString('th-TH', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            // อัปเดตข้อมูลที่แสดงในใบเสร็จ
+            document.getElementById('rcptBillNo').textContent = billNo;
+            document.getElementById('rcptBillDate').textContent = thaiDate;
+            document.getElementById('rcptCustName').textContent = custName;
+            document.getElementById('rcptCustPhone').textContent = custPhone;
+            document.getElementById('rcptCustDistrict').textContent = custDistrict;
+            document.getElementById('rcptDeviceType').textContent = deviceType;
+            document.getElementById('rcptDeviceModel').textContent = deviceModel;
+            document.getElementById('rcptDeviceSymptom').textContent = deviceSymptom;
+
+            // สร้างตารางรายการ
+            let itemsTable = '';
+            let subTotal = 0;
+
+            items.forEach(item => {
+                const name = item.querySelector('.item-name').value.trim();
+                const qty = parseFloat(item.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                const total = qty * price;
+                subTotal += total;
+
+                if (name) {
+                    itemsTable += `
+                        <tr>
+                            <td>${name}</td>
+                            <td style="text-align: center;">${qty}</td>
+                            <td style="text-align: right;">${price.toFixed(2)}</td>
+                            <td style="text-align: right;">${total.toFixed(2)}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            const grandTotal = subTotal - discount;
+
+            document.getElementById('rcptItemsTable').innerHTML = itemsTable;
+            document.getElementById('rcptSubTotal').textContent = subTotal.toFixed(2) + ' บาท';
+            document.getElementById('rcptDiscount').textContent = discount.toFixed(2) + ' บาท';
+            document.getElementById('rcptGrandTotal').textContent = grandTotal.toFixed(2) + ' บาท';
+
+            // แสดงโมดัล
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+
+        // ฟังก์ชันปิดใบเสร็จ
+        function closePreviewModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // ปิดโมดัลเมื่อคลิกนอกพื้นที่
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreviewModal();
+            }
+        });
+
+        // คำนวณเงินเมื่อโหลดหน้า
+        calculateTotal();
+    </script>
+
+</body>
+</html>
