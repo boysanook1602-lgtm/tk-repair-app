@@ -3,54 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Professional Service Hub</title>
+    <title>T&K Invoice Hub</title>
     <style>
         @import url('https://googleapis.com');
         
+        /* ปรับหน้าแอปให้สว่างสะอาดตา มองเห็นชัดเจน 100% */
         body { 
             font-family: 'Sarabun', sans-serif; 
             background-color: #f1f5f9; 
             color: #0f172a; 
-            padding: 10px;
+            padding: 12px;
             margin: 0;
         }
         .container { max-width: 500px; margin: auto; }
         
-        /* เมนูสลับหน้าจอบิลซ่อม และ ใบสั่งซื้ออะไหล่ */
+        /* ปุ่มสลับหน้าบิลซ่อม และ บิลสั่งอะไหล่ */
         .tab-menu { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn {
             flex: 1; padding: 12px; font-size: 13px; font-weight: bold;
-            border: 2px solid #cbd5e1; border-radius: 8px; cursor: pointer;
+            border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;
             background-color: #e2e8f0; color: #334155;
         }
         .tab-btn.active { background-color: #0284c7; color: white; border-color: #0284c7; }
 
-        /* กล่องฟอร์มสำหรับกรอกข้อมูล */
+        /* กล่องสีขาวสำหรับกรอกข้อมูล */
         .form-zone {
             background-color: white; padding: 16px; border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #cbd5e1;
         }
         .form-title {
-            font-size: 15px; font-weight: bold; color: #0369a1;
+            font-size: 14px; font-weight: bold; color: #0369a1;
             margin-top: 0; margin-bottom: 12px; border-bottom: 2px solid #0284c7; padding-bottom: 6px;
         }
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 10px; }
         .form-row { display: flex; gap: 8px; margin-bottom: 10px; }
         .form-row > div { flex: 1; }
         label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
         
-        /* ช่องกรอกข้อมูลสีขาวสว่าง ชัดเจน */
+        /* ช่องกรอกข้อมูลสีขาว ชัดเจน พิมพ์ง่าย */
         input[type="text"], input[type="number"], textarea {
             width: 100%; padding: 10px; font-size: 13px;
             border: 1px solid #94a3b8; border-radius: 6px; box-sizing: border-box;
             background-color: #ffffff; color: #0f172a;
         }
 
-        /* 📄 รูปแบบแผ่นกระดาษใบเสร็จ T&K */
+        /* 📄 แผ่นกระดาษใบเสร็จ T&K สำหรับใช้แคปหน้าจอ */
         .invoice-paper { 
             background: white; padding: 20px; border-radius: 12px;
             color: #1e293b; border: 2px solid #1e3a8a; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-top: 15px; margin-bottom: 30px;
+            margin-top: 10px; margin-bottom: 20px;
         }
         .bill-title { font-size: 18px; font-weight: 800; color: #1e3a8a; margin: 0; }
         .info-grid { display: flex; gap: 8px; margin-top: 10px; margin-bottom: 10px; }
@@ -81,17 +82,17 @@
 <body>
 
     <div class="container">
-        <!-- 🧭 เมนูสลับหน้าจอบิลซ่อม และ ใบสั่งซื้ออะไหล่ -->
+        <!-- เมนูหลักสลับหน้าจอบิลซ่อม และ ใบสั่งซื้ออะไหล่ -->
         <div class="tab-menu">
             <button id="tab-repair" onclick="switchMode('repair')" class="tab-btn active">🔧 บิลซ่อมลูกค้า</button>
             <button id="tab-parts" onclick="switchMode('parts')" class="tab-btn">📦 บิลสั่งซื้ออะไหล่</button>
         </div>
 
-        <!-- ฟอร์มกรอกข้อมูลบิลซ่อม -->
+        <!-- [หน้าฟอร์ม] 1. ข้อมูลบิลซ่อมลูกค้า -->
         <div id="form-repair-zone" class="form-zone">
             <div class="form-title">🔧 กรอกข้อมูลบิลซ่อมเครื่องใช้ไฟฟ้า</div>
             <div class="form-group">
-                <label>ชื่อผู้รับบริการ / ลูกค้า:</label>
+                <label>ชื่อลูกค้า:</label>
                 <input type="text" id="rep-customer" oninput="updateInvoiceDisplay()" placeholder="เช่น พี่ต้อย">
             </div>
             <div class="form-row">
@@ -106,40 +107,40 @@
             </div>
             <div class="form-row">
                 <div>
-                    <label>ผู้จ่ายงาน / เจ้าหน้าที่:</label>
+                    <label>ผู้จ่ายงาน:</label>
                     <input type="text" id="rep-staff" oninput="updateInvoiceDisplay()" placeholder="เช่น น้ำติ๊ก">
                 </div>
                 <div>
-                    <label>ช่างผู้รับผิดชอบ:</label>
+                    <label>ช่างผู้ซ่อม:</label>
                     <input type="text" id="rep-mechanic" oninput="updateInvoiceDisplay()" placeholder="เช่น ช่างเต่า">
                 </div>
             </div>
             <div class="form-row">
-                <div style="flex: 7;"><label>รายละเอียดงานซ่อม / รายการอะไหล่:</label><input type="text" id="rep-desc-1" oninput="updateInvoiceDisplay()" placeholder="เช่น งานซ่อมตู้เย็น"></div>
+                <div style="flex: 7;"><label>รายละเอียดงานซ่อม / อะไหล่:</label><input type="text" id="rep-desc-1" oninput="updateInvoiceDisplay()" placeholder="เช่น งานซ่อมตู้เย็น"></div>
                 <div style="flex: 3;"><label>ราคา (บาท):</label><input type="number" id="rep-price-1" oninput="updateInvoiceDisplay()" placeholder="เช่น 600"></div>
             </div>
             <div class="form-group">
-                <label>บันทึกรายงานเพิ่มเติมจากช่าง / เงื่อนไขประกัน:</label>
+                <label>บันทึกรายงานเพิ่มเติม / เงื่อนไขประกัน:</label>
                 <textarea id="rep-note" rows="2" oninput="updateInvoiceDisplay()" placeholder="เช่น รับประกันอะไหล่ระบบไฟ 3 เดือน..."></textarea>
             </div>
         </div>
 
-        <!-- ฟอร์มกรอกข้อมูลบิลสั่งอะไหล่ -->
+        <!-- [หน้าฟอร์ม] 2. ข้อมูลบิลสั่งอะไหล่ร้าน -->
         <div id="form-parts-zone" class="form-zone" style="display: none;">
             <div class="form-title" style="color: #b45309;">📦 กรอกข้อมูลสั่งซื้ออะไหล่ร้านภายใน</div>
             <div class="form-row">
                 <div>
-                    <label>สั่งซื้อจากร้าน / ซัพพลายเออร์:</label>
+                    <label>สั่งซื้อจากร้าน:</label>
                     <input type="text" id="part-supplier" oninput="updateInvoiceDisplay()" placeholder="เช่น ร้านอะไหล่กรุงเทพ">
                 </div>
                 <div>
-                    <label>ผู้จัดซื้อ / ช่างผู้ทำรายการ:</label>
+                    <label>ผู้จัดซื้อ / ช่าง:</label>
                     <input type="text" id="part-buyer" oninput="updateInvoiceDisplay()" placeholder="เช่น ช่างประสงค์">
                 </div>
             </div>
             <div class="form-group">
                 <label>สั่งเพื่อเคสงานซ่อมของลูกค้าคนไหน:</label>
-                <input type="text" id="part-purpose" oninput="updateInvoiceDisplay()" placeholder="เช่น อะไหล่ตู้เย็นคุณพี่ต้อย อ.สำโรงทาบ">
+                <input type="text" id="part-purpose" oninput="updateInvoiceDisplay()" placeholder="เช่น อะไหล่ตู้เย็นคุณพี่ต้อย">
             </div>
             <div class="form-row">
                 <div style="flex: 7;"><label>ชื่อชิ้นส่วนอะไหล่ที่สั่งซื้อ:</label><input type="text" id="part-desc-1" oninput="updateInvoiceDisplay()" placeholder="เช่น คอมเพรสเซอร์ตู้เย็น"></div>
@@ -151,8 +152,8 @@
             </div>
         </div>
 
-        <!-- 📄 ตัวใบเสร็จแสดงผลแบบทันที (Real-Time) พิมพ์ปุ๊บเปลี่ยนปั๊บ ข้อมูลตรงเป๊ะ -->
-        <div id="invoice-capture-zone" class="invoice-paper">
+        <!-- 📄 ตัวใบเสร็จที่แสดงผลตามการพิมพ์จริงแบบทันที (Real-Time) -->
+        <div class="invoice-paper">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; margin-bottom: 10px;">
                 <div style="width: 65%;">
                     <h1 id="bill-header-title" class="bill-title">ELECTRICAL SERVICE</h1>
@@ -166,7 +167,7 @@
             </div>
 
             <div id="info-cards-container" class="info-grid">
-                <!-- ข้อมูลการ์ดแสดงที่นี่ -->
+                <!-- ข้อมูลลูกค้าแสดงตรงนี้ -->
             </div>
 
             <table>
@@ -178,7 +179,7 @@
                     </tr>
                 </thead>
                 <tbody id="invoice-rows">
-                    <!-- รายการสินค้า -->
+                    <!-- รายการบิล -->
                 </tbody>
             </table>
 
