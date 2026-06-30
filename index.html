@@ -2,189 +2,25 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&K Repair Center System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&K Repair Center</title>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Helvetica Neue', Arial;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 450px;
-            background-color: #1e293b;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            border: 1px solid #334155;
-            margin-bottom: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .header h1 {
-            color: #22d3ee;
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-        .header p {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        label {
-            display: block;
-            font-size: 13px;
-            color: #cbd5e1;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-        input, select {
-            width: 100%;
-            background-color: #334155;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            padding: 12px;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
-        }
-        input:focus, select:focus {
-            border-color: #22d3ee;
-        }
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            padding: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-        .result-card {
-            display: none;
-            margin-top: 24px;
-            background-color: #0f172a;
-            border: 1px dashed #475569;
-            border-radius: 14px;
-            padding: 20px;
-        }
-        .result-title {
-            text-align: center;
-            font-weight: 700;
-            font-size: 16px;
-            color: #10b981;
-            margin-bottom: 16px;
-            border-bottom: 1px dashed #334155;
-            padding-bottom: 10px;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #94a3b8;
-        }
-        .result-item strong {
-            color: #f8fafc;
-        }
-        .divider {
-            border-top: 1px dashed #334155;
-            margin: 14px 0;
-        }
-        .total-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .total-price .amount {
-            font-size: 22px;
-            color: #f59e0b;
-        }
-        .warranty-box {
-            background-color: rgba(34, 211, 238, 0.1);
-            border: 1px solid rgba(34, 211, 238, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 14px;
-            text-align: center;
-        }
-        .warranty-box p {
-            font-size: 14px;
-            font-weight: 600;
-            color: #22d3ee;
-        }
-        .footer-note {
-            text-align: center;
-            font-size: 11px;
-            color: #475569;
-            margin-top: 14px;
-        }
-        /* ส่วนแสดงประวัติงานซ่อม */
-        .history-container {
-            width: 100%;
-            max-width: 450px;
-            background-color: #1e293b;
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid #334155;
-        }
-        .history-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #cbd5e1;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .history-item {
-            background-color: #0f172a;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 13px;
-            border-left: 4px solid #06b6d4;
-        }
-        .btn-clear {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .hidden { display: none !important; }
+        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 16px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 450px; background-color: #1e293b; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #22d3ee; font-size: 24px; }
+        .header p { color: #94a3b8; font-size: 12px; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 4px; }
+        input, select { width: 100%; background-color: #334155; border: 1px solid #475569; border-radius: 8px; padding: 10px; color: white; font-size: 15px; outline: none; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%); border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold; padding: 12px; cursor: pointer; margin-top: 10px; }
+        /* สไตล์กล่องใบเสร็จ */
+        .result-card { display: none; margin-top: 20px; background-color: #0f172a; border: 1px dashed #475569; border-radius: 12px; padding: 15px; }
+        .result-title { text-align: center; font-weight: bold; color: #10b981; margin-bottom: 12px; border-bottom: 1px dashed #334155; padding-bottom: 8px; }
+        .result-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .total-price { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px; }
+        .warranty-box { background-color: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 6px; padding: 10px; margin-top: 12px; text-align: center; color: #22d3ee; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -192,106 +28,100 @@
     <div class="container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบบันทึกงานและคำนวณประกันภัยหน้าร้าน</p>
+            <p>ระบบบันทึกงานซ่อมหน้าร้าน ทั่วสุรินทร์</p>
         </div>
 
         <div class="form-group">
-            <label for="customer">ชื่อ - เบอร์โทรลูกค้า</label>
-            <input type="text" id="customer" placeholder="เช่น แม่โม บ้านเกาะแก้ว 0875997735">
+            <label>ชื่อ - เบอร์โทรลูกค้า</label>
+            <input type="text" id="customer" placeholder="เช่น แม่โม 0875997735">
         </div>
 
         <div class="form-group">
-            <label for="district">อำเภอ (ในจังหวัดสุรินทร์)</label>
-            <input type="text" id="district" placeholder="เช่น เมืองสุรินทร์, สังขะ, สำโรงทาบ">
+            <label>อำเภอ (ในจังหวัดสุรินทร์)</label>
+            <input type="text" id="district" placeholder="เช่น เมืองสุรินทร์">
         </div>
 
-        <div class="form-row">
-            <div>
-                <label for="appliance">ประเภทอุปกรณ์</label>
-                <select id="appliance">
-                    <option value="TV">ทีวี (TV)</option>
-                    <option value="Washing">เครื่องซักผ้า</option>
-                    <option value="Fridge">ตู้เย็น</option>
-                    <option value="AC_Repair">ซ่อมแอร์บ้าน</option>
-                    <option value="AC_Wash">ล้างแอร์บ้าน</option>
-                    <option value="Fan">พัดลม</option>
-                </select>
-            </div>
-            <div>
-                <label for="status">ผลการปิดงาน</label>
-                <select id="status" onchange="togglePriceInput()">
-                    <option value="yes">ลูกค้าตกลงซ่อม</option>
-                    <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
-                </select>
-            </div>
+        <div class="form-group">
+            <label>ประเภทอุปกรณ์</label>
+            <select id="appliance">
+                <option value="ซ่อมทีวี">ทีวี (TV)</option>
+                <option value="ซ่อมเครื่องซักผ้า">เครื่องซักผ้า</option>
+                <option value="ซ่อมตู้เย็น">ตู้เย็น</option>
+                <option value="ซ่อมแอร์บ้าน">ซ่อมแอร์บ้าน</option>
+                <option value="ล้างแอร์บ้าน">ล้างแอร์บ้าน</option>
+                <option value="ซ่อมพัดลม">พัดลม</option>
+            </select>
         </div>
 
-        <div class="form-group" id="priceGroup">
-            <label for="price">ค่าอะไหล่ + ค่าบริการ (บาท)</label>
-            <input type="number" id="price" placeholder="ระบุจำนวนเงินที่นี่">
+        <div class="form-group">
+            <label>ผลการปิดงาน</label>
+            <select id="status">
+                <option value="yes">ลูกค้าตกลงซ่อม</option>
+                <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
+            </select>
         </div>
 
-        <button onclick="calculateJob()" class="btn-submit">
+        <div class="form-group">
+            <label>ค่าอะไหล่ + ค่าบริการ (บาท)</label>
+            <input type="number" id="price" placeholder="ถ้าตกลงซ่อม ให้ใส่จำนวนเงินที่นี่">
+        </div>
+
+        <button onclick="runProgram()" class="btn-submit">
             🔄 คำนวณเงินและออกบิล
         </button>
 
+        <!-- ส่วนใบเสร็จที่จะเด้งออกมา -->
         <div id="resultCard" class="result-card">
             <div class="result-title">📋 ใบสรุปงาน T&K Repair</div>
-            <div class="result-item"><span>ลูกค้า:</span><strong id="resCustomer">-</strong></div>
-            <div class="result-item"><span>พื้นที่บริการ:</span><strong>อ. <span id="resDistrict">-</span> จ.สุรินทร์</strong></div>
-            <div class="result-item"><span>ประเภทบริการ:</span><strong id="resAppliance">-</strong></div>
-            <div class="divider"></div>
-            <div class="total-price"><span>ยอดเก็บเงินสุทธิ:</span><span><strong id="resTotal" class="amount">0</strong> บาท</span></div>
-            <div class="warranty-box"><p id="resWarranty">-</p></div>
-            <div class="footer-note">📸 แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที</div>
+            <div class="result-item"><span>ลูกค้า:</span><span id="resCustomer"></span></div>
+            <div class="result-item"><span>พื้นที่:</span><span>อ. <span id="resDistrict"></span> จ.สุรินทร์</span></div>
+            <div class="result-item"><span>งานบริการ:</span><span id="resAppliance"></span></div>
+            <div class="total-price"><span>ยอดที่ต้องเก็บเงิน:</span><span><span id="resTotal" style="color:#f59e0b;"></span> บาท</span></div>
+            <div class="warranty-box" id="resWarranty"></div>
+            <p style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">📸 แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที</p>
         </div>
-    </div>
-
-    <!-- ส่วนประวัติงานซ่อม -->
-    <div class="history-container">
-        <div class="history-title">
-            <span>📜 ประวัติบันทึกงานซ่อมในเครื่อง</span>
-            <button onclick="clearHistory()" class="btn-clear">ล้างประวัติ</button>
-        </div>
-        <div id="historyList" class="history-list"></div>
     </div>
 
     <script>
-        // บังคับให้โหลดประวัติเก่าขึ้นมาแสดงตอนเปิดแอปครั้งแรก
-        window.onload = function() {
-            displayHistory();
-        };
+        function runProgram() {
+            // ดึงค่าจากฟอร์ม
+            var customer = document.getElementById('customer').value;
+            var district = document.getElementById('district').value;
+            var appliance = document.getElementById('appliance').value;
+            var status = document.getElementById('status').value;
+            var price = document.getElementById('price').value;
 
-        function togglePriceInput() {
-            const status = document.getElementById('status').value;
-            const priceGroup = document.getElementById('priceGroup');
-            if (status === 'no') {
-                priceGroup.classList.add('hidden');
-                document.getElementById('price').value = '';
+            // ตรวจสอบค่าว่างเบื้องต้น
+            if (!customer) { customer = "ลูกค้าทั่วไป"; }
+            if (!district) { district = "-"; }
+
+            var total = 0;
+            var warranty = "";
+
+            // คำนวณตามเงื่อนไขร้าน
+            if (status === "no") {
+                total = 300; // ค่าตรวจเช็ก/เดินทางเริ่มต้น
+                warranty = "ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)";
             } else {
-                priceGroup.classList.remove('hidden');
+                total = price ? price : 0;
+                
+                if (appliance === "ล้างแอร์บ้าน" || appliance === "ซ่อมพัดลม") {
+                    warranty = "รับประกันงานหลังทำ 30 วัน";
+                } else {
+                    warranty = "รับประกันอะไหล่และอาการเดิม 90 วัน (3 เดือน)";
+                }
             }
+
+            // แสดงค่าในใบเสร็จ
+            document.getElementById('resCustomer').innerText = customer;
+            document.getElementById('resDistrict').innerText = district;
+            document.getElementById('resAppliance').innerText = appliance;
+            document.getElementById('resTotal').innerText = Number(total).toLocaleString();
+            document.getElementById('resWarranty').innerText = warranty;
+
+            // สั่งเปิดกล่องใบเสร็จให้มองเห็น
+            document.getElementById('resultCard').style.display = 'block';
         }
-
-        function calculateJob() {
-            const customer = document.getElementById('customer').value || 'ลูกค้าทั่วไป';
-            const district = document.getElementById('district').value || '-';
-            const appliance = document.getElementById('appliance').value;
-            const status = document.getElementById('status').value;
-            let price = parseFloat(document.getElementById('price').value) || 0;
-
-            let totalAmount = 0;
-            let warrantyText = "";
-            let applianceText = "";
-
-            const applianceMap = {
-                'TV': 'ซ่อมทีวี', 'Washing': 'ซ่อมเครื่องซักผ้า', 'Fridge': 'ซ่อมตู้เย็น',
-                'AC_Repair': 'ซ่อมแอร์บ้าน', 'AC_Wash': 'ล้างแอร์บ้าน', 'Fan': 'ซ่อมพัดลม'
-            };
-            applianceText = applianceMap[appliance];
-
-            if (status === 'no') {
-                totalAmount = 300; 
-                warrantyText = "ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)";
-            } else {
-                totalAmount = price; 
+    </script>
+</body>
+</html>
