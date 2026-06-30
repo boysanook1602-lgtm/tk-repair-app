@@ -35,7 +35,6 @@
             width: 210mm;
             min-height: 297mm;
             padding: 20mm;
-            margin-top: 20px;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
             position: relative;
         }
@@ -65,22 +64,24 @@
         .signature-box { border-top: 1px dashed #000; width: 100%; max-width: 180px; margin-top: 50px; padding-top: 5px; color: #444; }
         .stamp-zone { font-size: 11px; color: #94a3b8; border: 1px dashed #cbd5e1; padding: 10px 5px; border-radius: 6px; width: 100%; max-width: 180px; margin-bottom: 10px; text-align: center; background-color: #fafafa; }
 
+        /* ปุ่มสั่งพิมพ์และปุ่มย้อนกลับ */
         .btn-print-trigger { background-color: #f59e0b; width: 100%; max-width: 600px; border: none; color: white; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; display: none; text-align: center; }
+        .btn-back-trigger { background-color: #475569; width: 100%; max-width: 600px; border: none; color: white; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 10px; display: none; text-align: center; }
 
         @media print {
             body { background: white; padding: 0; }
-            .app-container, .btn-print-trigger { display: none !important; }
+            .app-container, .btn-print-trigger, .btn-back-trigger { display: none !important; }
             #a4Invoice { display: block !important; margin: 0; box-shadow: none; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- หน้าจอป้อนข้อมูลบนมือถือ -->
-    <div class="app-container">
+    <!-- หน้าจอป้อนข้อมูลบนมือถือ (กล่องที่ 1) -->
+    <div id="inputSection" class="app-container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบออกบิลขนาด A4 บันทึกวันและเวลาอัตโนมัติ</p>
+            <p>ระบบออกบิลขนาด A4 ความเสถียรสูง 100%</p>
         </div>
 
         <div class="form-row">
@@ -157,8 +158,9 @@
         </button>
     </div>
 
-    <!-- ปุ่มสั่งปริ้นท์จากมือถือ -->
+    <!-- ปุ่มควบคุมระดับบนระบบหลังสร้างบิลเสร็จ -->
     <button id="printBtn" onclick="window.print()" class="btn-print-trigger">🖨️ กดพิมพ์บิล / บันทึกเป็น PDF ขนาด A4</button>
+    <button id="backBtn" onclick="goBackToInput()" class="btn-back-trigger">⬅️ ย้อนกลับไปแก้ไขข้อมูล</button>
 
     <!-- ----------------------------------------------------
          โครงสร้างใบเสร็จรับเงินรูปแบบกระดาษ A4 
@@ -169,14 +171,3 @@
                 <h2>T&K ELECTRICAL SERVICE</h2>
                 <p>ศูนย์บริการซ่อมเครื่องใช้ไฟฟ้าทุกชนิด ทั่วจังหวัดสุรินทร์</p>
                 <p>เบอร์โทรศัพท์ / Line: 063-671-8151</p>
-            </div>
-            <div class="invoice-title">
-                <h1>ใบเสร็จรับเงิน</h1>
-                <p>วันที่ออกบิล: <span id="billDate"></span></p>
-                <p>เวลาออกบิล: <span id="billTime"></span> น.</p>
-            </div>
-        </div>
-
-        <div class="info-grid">
-            <div class="client-info">
-                <strong>ข้อมูลผู้รับบริการ / ลูกค้า</strong><br>
