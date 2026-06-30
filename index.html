@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&K Billing System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <!-- Google Fonts (Anuphan) -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Anuphan', sans-serif;
+            background: radial-gradient(circle at top, #0d1b2a 0%, #020813 100%);
+            color: #e0e1dd;
+        }
+        /* Anime Glitch & Glow Effects */
+        .neon-border {
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.2), inset 0 0 15px rgba(0, 180, 216, 0.1);
+            border: 1px solid rgba(0, 180, 216, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .neon-border:focus-within {
+            box-shadow: 0 0 25px rgba(0, 180, 216, 0.6), inset 0 0 10px rgba(0, 180, 216, 0.2);
+            border-color: #00b4d8;
+        }
+        .anime-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .anime-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        .anime-btn:hover::after {
+            left: 100%;
+        }
+        .anime-btn:active {
+            transform: scale(0.95);
+        }
+        /* Entrance Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Print Styles Override */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-container { box-shadow: none !important; border: none !important; background: white !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            .print-text-dark { color: #1a1a1a !important; }
+            .print-border { border: 1px solid #333 !important; }
+            .print-bg-gray { background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            input, select, textarea { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; appearance: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 md:px-0">
 
+    <div class="max-w-4xl mx-auto bg-[#0b132b]/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl neon-border fade-in-up print-container">
+        
+        <!-- Header / Logo Section -->
+        <div class="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/50 pb-6 mb-6 print-border">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <div class="text-3xl font-extrabold tracking-wider text-cyan-400 flex items-center justify-center md:justify-start gap-2">
+                    <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i> T&K
+                </div>
+                <div class="text-xs tracking-widest text-cyan-200/60 uppercase font-medium">Electrical Appliance Repair Center</div>
+                <div class="text-xs text-gray-400 mt-1 print-text-dark"><i class="fa-solid fa-location-dot text-cyan-500"></i> รับซ่อมในสุรินทร์ ทุกอำเภอ</div>
+                <div class="text-xs text-gray-400 print-text-dark"><i class="fa-solid fa-phone text-cyan-500"></i> 063-671-8151</div>
+            </div>
+            <div class="text-center md:text-right">
+                <h1 class="text-2xl font-bold text-white tracking-wide uppercase print-text-dark">ใบเสร็จรับเงิน / ใบแจ้งหนี้</h1>
+                <p class="text-xs text-cyan-400 font-mono mt-1 print-text-dark">เลขที่ / No. <input type="text" value="INV-202607001" class="bg-transparent border-b border-cyan-800 text-cyan-300 w-32 text-center focus:outline-none font-mono print-text-dark"></p>
+                <p class="text-xs text-gray-400 font-mono mt-1 print-text-dark">วันที่ / Date: <input type="date" id="currentDate" class="bg-transparent text-gray-300 focus:outline-none print-text-dark"></p>
+            </div>
+        </div>
+
+        <!-- Customer & Device Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- Customer Section -->
+            <div class="p-4 bg-[#1c2541]/40 rounded-xl border border-cyan-950 print-bg-gray print-border">
+                <h3 class="text-sm font-semibold text-cyan-400 mb-3 print-text-dark"><i class="fa-solid fa-user-gear mr-2"></i> ข้อมูลลูกค้า (Customer Info)</h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ชื่อลูกค้า:</span>
+                        <input type="text" placeholder="ชื่อ-นามสกุล" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">เบอร์โทร:</span>
+                        <input type="text" placeholder="08X-XXXXXXX" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">อำเภอ:</span>
+                        <select class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                            <option value="เมืองสุรินทร์">เมืองสุรินทร์</option>
+                            <option value="สังขะ">สังขะ</option>
+                            <option value="ปราสาท">ปราสาท</option>
+                            <option value="ท่าตูม">ท่าตูม</option>
+                            <option value="รัตนบุรี">รัตนบุรี</option>
+                            <option value="ศีขรภูมิ">ศีขรภูมิ</option>
+                            <option value="จอมพระ">จอมพระ</option>
+                            <option value="ชุมพลบุรี">ชุมพลบุรี</option>
+                            <option value="สนม">สนม</option>
+                            <option value="สำโรงทาบ">สำโรงทาบ</option>
+                            <option value="กาบเชิง">กาบเชิง</option>
+                            <option value="พนมดงรัก">พนมดงรัก</option>
+                            <option value="ศรีณรงค์">ศรีณรงค์</option>
+                            <option value="เขวาสินรินทร์">เขวาสินรินทร์</option>
+                            <option value="โนนนารายณ์">โนนนารายณ์</option>
+                            <option value="บัวเชด">บัวเชด</option>
+                            <option value="ลำดวน">ลำดวน</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Device Section -->
+            <div class="p-4 bg-[#1c2541]/40 rounded-xl border border-cyan-950 print-bg-gray print-border">
+                <h3 class="text-sm font-semibold text-cyan-400 mb-3 print-text-dark"><i class="fa-solid fa-screwdriver-wrench mr-2"></i> ข้อมูลตัวเครื่อง (Device Info)</h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ประเภทงาน:</span>
+                        <select class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                            <option value="TV REPAIR">TV REPAIR (ซ่อมทีวี)</option>
+                            <option value="WASHING MACHINE">WASHING MACHINE (ซ่อมเครื่องซักผ้า)</option>
+                            <option value="FRIDGE REPAIR">FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
+                            <option value="A/C REPAIR & SERVICE">A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
+                            <option value="FAN REPAIR">FAN REPAIR (ซ่อมพัดลม)</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ยี่ห้อ/รุ่น:</span>
+                        <input type="text" placeholder="เช่น SAMSUNG, LG, SONY" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">อาการเสีย:</span>
+                        <input type="text" placeholder="อาการที่ช่างตรวจพบ" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service & Parts Items Table -->
