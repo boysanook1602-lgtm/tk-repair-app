@@ -3,147 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Invoice Creator Pro</title>
-    <!-- Tailwind CSS วารชันล่าสุด -->
+    <title>T&K Professional Service Hub</title>
+    <!-- เรียกใช้ Tailwind CSS มาตรฐานเพื่อให้แสดงผลโมเดิร์นแม่นยำบนมือถือ -->
     <script src="https://jsdelivr.net"></script>
-    <!-- html2canvas สำหรับแปลงบิลเป็นรูปภาพ -->
+    <!-- html2canvas สำหรับแปลงบิลเป็นรูปภาพส่ง Line -->
     <script src="https://cloudflare.com"></script>
     <style>
         @import url('https://googleapis.com');
         body { font-family: 'Sarabun', sans-serif; background-color: #0f172a; }
-        .invoice-box { background: white; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; }
+        .invoice-paper { background: white; max-width: 500px; margin: auto; padding: 24px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3); color: #1e293b; }
     </style>
 </head>
-<body class="p-2 sm:p-4 text-slate-200">
+<body class="p-2 sm:p-4 min-h-screen bg-slate-950 text-slate-100">
 
-    <!-- ฟอร์มกรอกข้อมูลสไตล์ DARK MODE (ถอมสายตาช่าง) -->
-    <div id="input-form" class="max-w-[500px] mx-auto bg-slate-900 p-4 rounded-2xl shadow-xl mb-4 border border-slate-800">
-        <div class="flex justify-between items-center mb-3">
-            <h2 class="text-base font-bold text-cyan-400">🌙 ฟอร์มออกบิล (โหมดถนอมสายตา)</h2>
-            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700">T&K Service</span>
-        </div>
-        
-        <!-- ข้อมูลลูกค้า -->
-        <div class="grid grid-cols-2 gap-2 mb-3">
-            <div>
-                <label class="block text-[11px] font-semibold text-slate-400 mb-1">ชื่อลูกค้า:</label>
-                <input type="text" id="input-customer" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น พี่ต้อย">
-            </div>
-            <div>
-                <label class="block text-[11px] font-semibold text-slate-400 mb-1">เบอร์โทรลูกค้า:</label>
-                <input type="text" id="input-phone" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น 0969525716">
-            </div>
-        </div>
-        
-        <div class="mb-3">
-            <label class="block text-[11px] font-semibold text-slate-400 mb-1">พื้นที่ / อำเภอ จังหวัด:</label>
-            <input type="text" id="input-address" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น อ.สำโรงทาบ จ.สุรินทร์">
-        </div>
-
-        <!-- ข้อมูลช่าง -->
-        <div class="grid grid-cols-2 gap-2 mb-3 border-t border-slate-800 pt-2">
-            <div>
-                <label class="block text-[11px] font-semibold text-slate-400 mb-1">ผู้จ่ายงาน/เจ้าหน้าที่:</label>
-                <input type="text" id="input-staff" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น น้ำติ๊ก">
-            </div>
-            <div>
-                <label class="block text-[11px] font-semibold text-slate-400 mb-1">ช่างผู้ซ่อม:</label>
-                <input type="text" id="input-mechanic" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น เต่า">
-            </div>
-        </div>
-
-        <hr class="border-slate-800 my-3">
-        
-        <!-- รายการซ่อม -->
-        <div id="items-container">
-            <label class="block text-[11px] font-semibold text-slate-400 mb-1">รายการบริการ / อะไหล่ชิ้นส่วน:</label>
-            <div class="grid grid-cols-12 gap-1 mb-2">
-                <input type="text" placeholder="รายละเอียดซ่อม (เช่น งานซ่อมตู้เย็น)" class="col-span-7 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white item-desc">
-                <input type="number" placeholder="ราคา" class="col-span-3 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white item-labor" oninput="calculateTotal()">
-                <input type="number" placeholder="จำนวน" value="1" class="col-span-2 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white item-qty" oninput="calculateTotal()">
-            </div>
-        </div>
-
-        <button onclick="addItemRow()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 rounded-lg font-semibold mt-1 mb-3 border border-slate-700 transition-all">+ เพิ่มรายการอะไหล่/บริการ</button>
-
-        <div class="mb-3">
-            <label class="block text-[11px] font-semibold text-slate-400 mb-1">บันทึกรายงานเพิ่มเติมจากช่าง / เงื่อนไขประกัน:</label>
-            <textarea id="input-note" rows="2" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น ซ่อมระบบไฟเสร็จเรียบร้อย รับประกันอะไหล่..."></textarea>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-            <button onclick="generateInvoice(true)" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 text-xs rounded-xl transition-all shadow-md">💾 บันทึกข้อมูลลงเครื่อง</button>
-            <button onclick="clearForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs py-2.5 rounded-xl transition-all border border-slate-700">ล้างฟอร์ม</button>
-        </div>
+    <!-- 🧭 เมนูหลักสลับหน้าจอทำบิล (ทันสมัย ใช้งานง่าย) -->
+    <div class="max-w-[500px] mx-auto mb-4 bg-slate-900 p-1.5 rounded-xl border border-slate-800 flex gap-1">
+        <button id="tab-repair" onclick="switchMode('repair')" class="w-1/2 py-2.5 text-xs font-bold rounded-lg transition-all bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md">
+            🔧 บิลซ่อมเครื่องใช้ไฟฟ้า
+        </button>
+        <button id="tab-parts" onclick="switchMode('parts')" class="w-1/2 py-2.5 text-xs font-bold rounded-lg transition-all text-slate-400 hover:bg-slate-800/50">
+            📦 บิลสั่งซื้ออะไหล่ร้าน
+        </button>
     </div>
 
-    <!-- 📊 โซนประวัติการออกบิลเก่าที่เคยเซฟไว้ (ดึงข้อมูลมาดูใหม่ได้) -->
-    <div class="max-w-[500px] mx-auto bg-slate-900 p-3 rounded-2xl shadow-xl mb-4 border border-slate-800 text-xs">
-        <p class="font-bold text-slate-400 mb-2">📂 ประวัติการออกบิลในเครื่องล่าสุด:</p>
-        <div id="history-list" class="max-h-[100px] overflow-y-auto space-y-1 pr-1">
-            <p class="text-slate-500 italic text-[11px]">ยังไม่มีประวัติการบันทึกบิล</p>
+    <!-- ========================================================================= -->
+    <!-- 1. [ฟอร์มกรอก] - ระบบบิลซ่อมเครื่องใช้ไฟฟ้า -->
+    <!-- ========================================================================= -->
+    <div id="form-repair-zone" class="max-w-[500px] mx-auto bg-slate-900 p-4 rounded-2xl shadow-xl mb-4 border border-slate-800">
+        <h2 class="text-sm font-bold text-cyan-400 mb-4 flex items-center gap-1.5">📝 ข้อมูลสำหรับออกบิลซ่อมลูกค้า</h2>
+        
+        <div class="space-y-3">
+            <div>
+                <label class="block text-[11px] font-medium text-slate-400 mb-1">ชื่อผู้รับบริการ / ลูกค้า:</label>
+                <input type="text" id="rep-customer" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น พี่ต้อย">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">เบอร์โทรศัพท์:</label>
+                    <input type="text" id="rep-phone" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น 0969525716">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">พื้นที่ / อำเภอ จังหวัด:</label>
+                    <input type="text" id="rep-address" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น อ.สำโรงทาบ จ.สุรินทร์">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 border-t border-slate-800/80 pt-2">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">ผู้จ่ายงาน / เจ้าหน้าที่:</label>
+                    <input type="text" id="rep-staff" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น น้ำติ๊ก">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">ช่างผู้รับผิดชอบ:</label>
+                    <input type="text" id="rep-mechanic" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น ช่างเต่า">
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800/80 pt-2">
+                <label class="block text-[11px] font-medium text-slate-400 mb-1.5">รายการบริการ / รายละเอียดอะไหล่ชิ้นส่วน:</label>
+                <div id="rep-items-list" class="space-y-2">
+                    <div class="grid grid-cols-12 gap-1.5">
+                        <input type="text" placeholder="ระบุรายการบริการซ่อม/อะไหล่" class="col-span-7 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white rep-item-desc">
+                        <input type="number" placeholder="ราคา" class="col-span-3 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white text-right rep-item-price" oninput="updateInvoiceDisplay()">
+                        <input type="number" placeholder="ตัว" value="1" class="col-span-2 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white text-center rep-item-qty" oninput="updateInvoiceDisplay()">
+                    </div>
+                </div>
+                <button onclick="addRepairItemRow()" class="w-full mt-2 bg-slate-800 hover:bg-slate-750 text-slate-400 text-[11px] py-1.5 rounded-lg border border-slate-700">+ เพิ่มรายการซ่อมเพิ่มเติม</button>
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-medium text-slate-400 mb-1">บันทึกรายงานเพิ่มเติมจากช่าง / เงื่อนไขประกัน:</label>
+                <textarea id="rep-note" rows="2" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="เช่น ซ่อมระบบไฟเสร็จเรียบร้อย ตรวจเช็คการทำงานปกติ รับประกันเฉพาะชิ้นส่วนอะไหล่ที่เปลี่ยน 3 เดือน"></textarea>
+            </div>
         </div>
+
+        <button onclick="updateInvoiceDisplay()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-3 text-xs rounded-xl shadow-md transition-all">✨ อัปเดตข้อมูลขึ้นใบเสร็จลูกค้า</button>
     </div>
 
-    <!-- 📄 ตัวใบเสร็จส่งลูกค้า (คงความขาวคลีน เพื่อความสวยงามตอนส่ง Line) -->
-    <div id="invoice-card" class="invoice-box rounded-2xl relative overflow-hidden shadow-2xl text-slate-800">
+    <!-- ========================================================================= -->
+    <!-- 2. [ฟอร์มกรอก] - ระบบบิลสั่งซื้ออะไหล่ร้าน (ซ่อนไว้เริ่มต้น) -->
+    <!-- ========================================================================= -->
+    <div id="form-parts-zone" class="max-w-[500px] mx-auto bg-slate-900 p-4 rounded-2xl shadow-xl mb-4 border border-slate-800 hidden">
+        <h2 class="text-sm font-bold text-amber-400 mb-4 flex items-center gap-1.5">📦 ข้อมูลใบสั่งซื้อ / จัดหาอะไหล่ภายใน</h2>
         
-        <!-- ส่วนหัวบิล T&K -->
-        <div class="flex items-start justify-between border-b-2 border-blue-900 pb-3">
-            <div class="w-2/3">
-                <h1 class="text-base font-bold text-blue-900 tracking-wide uppercase">ELECTRICAL SERVICE</h1>
-                <p class="text-[10px] text-gray-600 font-medium mt-0.5">ศูนย์บริการซ่อมเครื่องใช้ไฟฟ้าทุกชนิด ทั่วจังหวัดสุรินทร์</p>
-                <p class="text-[10px] text-gray-500 font-bold mt-1">เบอร์โทรศัพท์ / Line: 063-671-8151</p>
+        <div class="space-y-3">
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">สั่งซื้อจากร้าน / ซัพพลายเออร์:</label>
+                    <input type="text" id="part-supplier" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" placeholder="เช่น ร้านอะไหล่กรุงเทพ">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">ผู้ทำรายการสั่งซื้อ:</label>
+                    <input type="text" id="part-buyer" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" placeholder="เช่น ช่างประสงค์">
+                </div>
             </div>
-            <div class="w-1/3 text-right text-[10px] text-gray-600">
-                <p><span class="font-bold text-blue-900">วันที่:</span> <span id="lbl-date">-</span></p>
-                <p><span class="font-bold text-blue-900">เวลาออกบิล:</span> <span id="lbl-time">-</span></p>
-                <p class="mt-1"><span class="font-bold text-gray-500">เลขที่บิล:</span> <span id="lbl-inv-no" class="font-mono font-bold text-blue-800">-</span></p>
+            <div>
+                <label class="block text-[11px] font-medium text-slate-400 mb-1">วัตถุประสงค์ / สำหรับงานซ่อมลูกค้า:</label>
+                <input type="text" id="part-purpose" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" placeholder="เช่น อะไหล่ตู้เย็นคุณพี่ต้อย อ.สำโรงทาบ">
+            </div>
+
+            <div class="border-t border-slate-800/80 pt-2">
+                <label class="block text-[11px] font-medium text-slate-400 mb-1.5">รายการชิ้นส่วนอะไหล่ที่ต้องการสั่งซื้อ:</label>
+                <div id="part-items-list" class="space-y-2">
+                    <div class="grid grid-cols-12 gap-1.5">
+                        <input type="text" placeholder="ระบุชื่อรุ่น/รหัสชิ้นส่วนอะไหล่" class="col-span-7 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white part-item-desc">
+                        <input type="number" placeholder="ราคาประเมิน" class="col-span-3 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white text-right part-item-price" oninput="updateInvoiceDisplay()">
+                        <input type="number" placeholder="จำนวน" value="1" class="col-span-2 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white text-center part-item-qty" oninput="updateInvoiceDisplay()">
+                    </div>
+                </div>
+                <button onclick="addPartItemRow()" class="w-full mt-2 bg-slate-800 hover:bg-slate-750 text-slate-400 text-[11px] py-1.5 rounded-lg border border-slate-700">+ เพิ่มรายการอะไหล่</button>
+            </div>
+            
+            <div>
+                <label class="block text-[11px] font-medium text-slate-400 mb-1">หมายเหตุ / ความเร่งด่วน:</label>
+                <input type="text" id="part-note" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" placeholder="เช่น ด่วนมาก ลูกค้ารอใช้งานเครื่องภายในวันศุกร์">
             </div>
         </div>
 
-        <!-- ข้อมูลผู้รับบริการ & ข้อมูลเจ้าหน้าที่ -->
-        <div class="grid grid-cols-2 gap-3 my-3 text-[11px]">
-            <div class="border border-blue-100 p-2.5 rounded-xl bg-blue-50/20">
-                <p class="font-bold text-blue-900 mb-1 border-b border-blue-100 pb-0.5">📥 ข้อมูลผู้รับบริการ / ลูกค้า</p>
-                <p><span class="text-gray-500">ชื่อลูกค้า:</span> <span id="lbl-customer" class="font-bold text-gray-900">-</span></p>
-                <p><span class="text-gray-500">เบอร์โทร:</span> <span id="lbl-phone" class="font-mono">-</span></p>
-                <p><span class="text-gray-500">พื้นที่:</span> <span id="lbl-address">-</span></p>
-            </div>
-            <div class="border border-yellow-100 p-2.5 rounded-xl bg-yellow-50/20">
-                <p class="font-bold text-amber-800 mb-1 border-b border-yellow-100 pb-0.5">👷 ข้อมูลเจ้าหน้าที่ทำงาน</p>
-                <p><span class="text-gray-500">ผู้จ่ายงาน:</span> <span id="lbl-staff" class="font-bold">-</span></p>
-                <p><span class="text-gray-500">ช่างผู้ซ่อม:</span> <span id="lbl-mechanic" class="font-bold text-blue-800">-</span></p>
-                <p><span class="text-gray-500">ผลการงาน:</span> <span class="text-emerald-600 font-bold">ตกลงซ่อม</span></p>
-            </div>
-        </div>
+        <button onclick="updateInvoiceDisplay()" class="w-full mt-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 text-xs rounded-xl shadow-md transition-all">✨ อัปเดตข้อมูลขึ้นใบสั่งซื้ออะไหล่</button>
+    </div>
 
-        <!-- ตารางรายการบิล -->
-        <table class="w-full text-left border-collapse text-[11px] mt-2">
-            <thead>
-                <tr class="bg-blue-950 text-white text-[10px]">
-                    <th class="p-2 w-10 text-center rounded-l-md">ลำดับ</th>
-                    <th class="p-2">รายการบริการ / รายละเอียดอะไหล่</th>
-                    <th class="p-2 text-right w-16">ราคา/หน่วย</th>
-                    <th class="p-2 text-center w-12">จำนวน</th>
-                    <th class="p-2 text-right w-20 rounded-r-md">รวม (บาท)</th>
-                </tr>
-            </thead>
-            <tbody id="invoice-rows" class="divide-y divide-gray-100">
-                <tr>
-                    <td class="p-4 text-center text-gray-400" colspan="5">กรอกข้อมูลด้านบนแล้วกด "บันทึกข้อมูล"</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- รายงานเพิ่มเติมจากช่าง -->
-        <div id="note-area" class="mt-3 p-2 bg-gray-50 rounded-lg border border-gray-200 text-[10px] hidden">
-            <p class="font-bold text-gray-600">📌 บันทึกรายงานเพิ่มเติมจากช่าง:</p>
-            <p id="lbl-note" class="text-blue-900 font-medium whitespace-pre-line"></p>
-        </div>
-
-        <!-- ส่วนท้าย: บัญชีและยอดรวม -->
-        <div class="mt-4 pt-3 border-t border-gray-200 grid grid-cols-12 gap-2 items-end">
-            <!-- บัญชีกรุงไทยของช่างประสงค์ -->
-            <div class="col-span-7 border border-blue-200 p-2 rounded-xl bg-blue-50/40 text-[10px] text-gray-700 relative">
-                <p class="font-semibold text-blue-900 mb-0.5">💳 ช่องทางชำระเงินผ่านธนาคาร</p>
