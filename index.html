@@ -2,79 +2,272 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>T&K Repair Center System</title>
-    <!-- ใช้ Tailwind CSS เพื่อให้หน้าจอแสดงผลสวยงามบนมือถือ -->
-    <script src="https://tailwindcss.com"></script>
+    <style>
+        /* ตั้งค่าสไตล์พื้นฐาน */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Helvetica Neue', Arial;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        /* กล่องหลักของแอป */
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #1e293b;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+        }
+        /* ส่วนหัวแอป */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            color: #22d3ee;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+        }
+        .header p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        /* ส่วนฟอร์ม */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-cols: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            background-color: #334155;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 12px;
+            color: #ffffff;
+            font-size: 15px;
+            transition: all 0.2s;
+            outline: none;
+            -webkit-appearance: none; /* ลบดีไซน์เดิมของระบบปฏิบัติการมือถือ */
+        }
+        input:focus, select:focus {
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+        }
+        input::placeholder {
+            color: #64748b;
+        }
+        /* ปุ่มคำนวณเงิน */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        /* กล่องใบเสร็จสรุปงาน */
+        .result-card {
+            display: none; /* ซ่อนไว้ก่อนกดคำนวณ */
+            margin-top: 24px;
+            background-color: #0f172a;
+            border: 1px dashed #475569;
+            border-radius: 14px;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #10b981;
+            margin-bottom: 16px;
+            border-bottom: 1px dashed #334155;
+            padding-bottom: 10px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .result-item strong {
+            color: #f8fafc;
+        }
+        .divider {
+            border-top: 1px dashed #334155;
+            margin: 14px 0;
+        }
+        .total-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .total-price .amount {
+            font-size: 22px;
+            color: #f59e0b;
+        }
+        .warranty-box {
+            background-color: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 14px;
+            text-align: center;
+        }
+        .warranty-box label {
+            color: #22d3ee;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+        .warranty-box p {
+            font-size: 14px;
+            font-weight: 600;
+            color: #22d3ee;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: #475569;
+            margin-top: 14px;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-white p-4 font-sans">
+<body>
 
-    <div class="max-w-md mx-auto bg-slate-800 rounded-2xl shadow-xl p-6 border border-slate-700">
+    <div class="container">
         <!-- หัวข้อแอป -->
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-cyan-400">T&K ELECTRICAL</h1>
-            <p class="text-xs text-slate-400">ระบบบันทึกงานและคำนวณประกันภัยหน้าร้าน</p>
+        <div class="header">
+            <h1>T&K ELECTRICAL</h1>
+            <p>ระบบบันทึกงานและคำนวณประกันภัยหน้าร้าน</p>
         </div>
 
         <!-- ฟอร์มกรอกข้อมูล -->
-        <div class="space-y-4">
-            <div>
-                <label class="block text-sm text-slate-300 mb-1">ชื่อ - เบอร์โทรลูกค้า</label>
-                <input type="text" id="customer" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="เช่น คุณสมชาย 063-671-8151">
-            </div>
-
-            <div>
-                <label class="block text-sm text-slate-300 mb-1">อำเภอ (ในสุรินทร์)</label>
-                <input type="text" id="district" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="เช่น เมืองสุรินทร์, สังขะ">
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">ประเภทอุปกรณ์</label>
-                    <select id="appliance" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none">
-                        <option value="TV">ทีวี (TV)</option>
-                        <option value="Washing">เครื่องซักผ้า</option>
-                        <option value="Fridge">ตู้เย็น</option>
-                        <option value="AC_Repair">ซ่อมแอร์</option>
-                        <option value="AC_Wash">ล้างแอร์</option>
-                        <option value="Fan">พัดลม</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">ผลการปิดงาน</label>
-                    <select id="status" onchange="togglePriceInput()" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none">
-                        <option value="yes">ลูกค้าตกลงซ่อม</option>
-                        <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="priceGroup">
-                <label class="block text-sm text-slate-300 mb-1">ค่าอะไหล่ + ค่าบริการ (บาท)</label>
-                <input type="number" id="price" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="0">
-            </div>
-
-            <button onclick="calculateJob()" class="w-full bg-gradient-to-r border-0 from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-200">
-                🔄 คำนวณเงินและออกบิล
-            </button>
+        <div class="form-group">
+            <label for="customer">ชื่อ - เบอร์โทรลูกค้า</label>
+            <input type="text" id="customer" placeholder="เช่น แม่โม บ้านเกาะแก้ว 0875997735">
         </div>
 
+        <div class="form-group">
+            <label for="district">อำเภอ (ในจังหวัดสุรินทร์)</label>
+            <input type="text" id="district" placeholder="เช่น เมืองสุรินทร์, สังขะ, สำโรงทาบ">
+        </div>
+
+        <div class="form-row">
+            <div>
+                <label for="appliance">ประเภทอุปกรณ์</label>
+                <select id="appliance">
+                    <option value="TV">ทีวี (TV)</option>
+                    <option value="Washing">เครื่องซักผ้า</option>
+                    <option value="Fridge">ตู้เย็น</option>
+                    <option value="AC_Repair">ซ่อมแอร์บ้าน</option>
+                    <option value="AC_Wash">ล้างแอร์บ้าน</option>
+                    <option value="Fan">พัดลม</option>
+                </select>
+            </div>
+            <div>
+                <label for="status">ผลการปิดงาน</label>
+                <select id="status" onchange="togglePriceInput()">
+                    <option value="yes">ลูกค้าตกลงซ่อม</option>
+                    <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="priceGroup">
+            <label for="price">ค่าอะไหล่ + ค่าบริการ (บาท)</label>
+            <input type="number" id="price" placeholder="ระบุจำนวนเงินที่นี่">
+        </div>
+
+        <button onclick="calculateJob()" class="btn-submit">
+            🔄 คำนวณเงินและออกบิล
+        </button>
+
         <!-- ส่วนแสดงผลลัพธ์ (ใบเสร็จ) -->
-        <div id="resultCard" class="hidden mt-6 bg-slate-900 border border-dashed border-slate-600 rounded-xl p-4 text-sm space-y-2">
-            <div class="text-center font-bold text-md text-emerald-400 mb-2">📋 ใบสรุปงาน T&K Repair</div>
-            <p><strong>ลูกค้า:</strong> <span id="resCustomer"></span></p>
-            <p><strong>พื้นที่:</strong> อ. <span id="resDistrict"></span> จ.สุรินทร์</p>
-            <p><strong>บริการ:</strong> <span id="resAppliance"></span></p>
-            <hr class="border-slate-700 my-2">
-            <p class="text-lg"><strong>ยอดเก็บเงินจริง:</strong> <span id="resTotal" class="text-yellow-400 font-bold"></span> บาท</p>
-            <p><strong>ระยะเวลาประกัน:</strong> <span id="resWarranty" class="text-cyan-400"></span></p>
-            <div class="text-center pt-2">
-                <p class="text-xs text-slate-500">แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที</p>
+        <div id="resultCard" class="result-card">
+            <div class="result-title">📋 ใบสรุปงาน T&K Repair</div>
+            
+            <div class="result-item">
+                <span>ลูกค้า:</span>
+                <strong id="resCustomer">-</strong>
+            </div>
+            <div class="result-item">
+                <span>พื้นที่บริการ:</span>
+                <strong>อ. <span id="resDistrict">-</span> จ.สุรินทร์</strong>
+            </div>
+            <div class="result-item">
+                <span>ประเภทบริการ:</span>
+                <strong id="resAppliance">-</strong>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="total-price">
+                <span>ยอดเก็บเงินสุทธิ:</span>
+                <span><strong id="resTotal" class="amount">0</strong> บาท</span>
+            </div>
+            
+            <div class="warranty-box">
+                <label>เงื่อนไขการรับประกัน</label>
+                <p id="resWarranty">-</p>
+            </div>
+            
+            <div class="footer-note">
+                📸 แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที
             </div>
         </div>
     </div>
 
-    <!-- ลอจิกการคำนวณเบหลังบ้าน -->
+    <!-- ลอจิกการคำนวณเบื้องหลัง -->
     <script>
         function togglePriceInput() {
             const status = document.getElementById('status').value;
@@ -97,39 +290,16 @@
             let warrantyText = "";
             let applianceText = "";
 
-            // แปลงข้อความประเภทอุปกรณ์
             const applianceMap = {
                 'TV': 'ซ่อมทีวี', 'Washing': 'ซ่อมเครื่องซักผ้า', 'Fridge': 'ซ่อมตู้เย็น',
                 'AC_Repair': 'ซ่อมแอร์บ้าน', 'AC_Wash': 'ล้างแอร์บ้าน', 'Fan': 'ซ่อมพัดลม'
             };
             applianceText = applianceMap[appliance];
 
-            // ลอจิกเงื่อนไขตามรูปภาพหน้าร้านจริง
             if (status === 'no') {
-                totalAmount = 300; // ค่าบริการตรวจเช็กและค่าเดินทางเริ่มต้นในสุรินทร์
+                totalAmount = 300; 
                 warrantyText = "ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)";
             } else {
-                totalAmount = price; // คิดตามราคาที่ช่างประเมินรวมค่าอะไหล่
+                totalAmount = price; 
                 
-                // คำนวณวันประกันอัตโนมัติ
                 if (appliance === 'AC_Wash') {
-                    warrantyText = "รับประกันน้ำรั่ว/น้ำหยด 30 วัน";
-                } else if (appliance === 'Fan') {
-                    warrantyText = "รับประกันงานซ่อมพัดลม 30 วัน";
-                } else {
-                    warrantyText = "รับประกันอะไหล่และอาการเดิม 90 วัน (3 เดือน)";
-                }
-            }
-
-            // แสดงผลบนหน้าจอ
-            document.getElementById('resCustomer').innerText = customer;
-            document.getElementById('resDistrict').innerText = district;
-            document.getElementById('resAppliance').innerText = applianceText;
-            document.getElementById('resTotal').innerText = totalAmount.toLocaleString();
-            document.getElementById('resWarranty').innerText = warrantyText;
-            
-            document.getElementById('resultCard').classList.remove('hidden');
-        }
-    </script>
-</body>
-</html>
