@@ -4,144 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>T&K Billing System PRO</title>
-    <!-- คลังรหัสแปลงหน้าจอเป็นรูปภาพ เวอร์ชันตรวจสอบแล้วว่าเสถียรที่สุดบนแอนดรอยด์และไอโฟน -->
-    <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body {
-            background-color: #f1f5f9;
-            color: #1e293b;
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: start;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-        }
-
-        /* ส่วนหัวตามสไตล์ร้าน T&K */
-        .header { text-align: center; margin-bottom: 18px; border-b: 2px solid #e2e8f0; padding-bottom: 12px; }
+        body { background-color: #f1f5f9; color: #1e293b; padding: 12px; display: flex; justify-content: center; align-items: start; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 480px; background: #ffffff; border-radius: 16px; padding: 18px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; }
+        .header { text-align: center; margin-bottom: 18px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; }
         .logo-title { font-size: 26px; font-weight: 800; color: #0284c7; tracking: 1px; }
         .logo-sub { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; }
         .tagline { font-size: 12px; color: #0284c7; background: #e0f2fe; display: inline-block; padding: 4px 12px; border-radius: 20px; margin-top: 6px; font-weight: bold; }
-
-        /* การจัดบล็อกส่วนข้อมูล */
-        .card-section {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 14px;
-            border: 1px solid #e2e8f0;
-        }
+        .card-section { background: #f8fafc; border-radius: 12px; padding: 14px; margin-bottom: 14px; border: 1px solid #e2e8f0; }
         .section-title { font-size: 13px; color: #0369a1; font-weight: 700; margin-bottom: 10px; border-left: 4px solid #0284c7; padding-left: 8px; }
-        
         .form-group { margin-bottom: 10px; }
-        .form-group:last-child { margin-bottom: 0; }
         .form-group label { display: block; font-size: 12px; color: #475569; margin-bottom: 4px; font-weight: 600; }
-        
-        /* ช่องกรอกข้อมูลอักษรดำชัดเจน ไม่กลืนสี */
-        input, select {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 10px 12px;
-            color: #0f172a !important;
-            font-size: 15px;
-            font-weight: 500;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #0284c7;
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-        }
-
-        /* โครงสร้างการกรอกรายการซ่อมแบบป้องกันจอตกขอบ */
-        .item-row-card {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border: 1px solid #cbd5e1;
-            position: relative;
-        }
-        .item-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 10px; 
-            margin-top: 10px; 
-        }
-        
-        .btn-delete {
-            position: absolute; right: 10px; top: 10px;
-            background: #fee2e2; border: none; color: #dc2626; font-size: 11px; 
-            cursor: pointer; font-weight: bold; padding: 2px 8px; border-radius: 4px;
-        }
-
-        /* ปุ่มกดสั่งงาน */
-        .btn-primary {
-            width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; 
-            padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
+        input, select { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; color: #0f172a !important; font-size: 15px; font-weight: 500; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
+        .item-row-card { background: #ffffff; border-radius: 8px; padding: 12px; margin-bottom: 10px; border: 1px solid #cbd5e1; position: relative; }
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn-delete { position: absolute; right: 10px; top: 10px; background: #fee2e2; border: none; color: #dc2626; font-size: 11px; cursor: pointer; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+        .btn-primary { width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
         .btn-primary:active { transform: scale(0.96); background: #0369a1; }
-
-        .btn-secondary {
-            width: 100%; background: #ffffff; color: #0284c7;
-            border: 1px solid #0284c7; border-radius: 8px; padding: 10px; margin-top: 5px;
-            font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-secondary:active { background: #f0f9ff; }
-
-        /* ส่วนแสดงยอดสรุปเงิน */
+        .btn-secondary { width: 100%; background: #ffffff; color: #0284c7; border: 1px solid #0284c7; border-radius: 8px; padding: 10px; margin-top: 5px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .summary-box { display: flex; flex-direction: column; gap: 8px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #334155; }
         .total-row { font-size: 20px; color: #b45309; font-weight: 800; border-top: 2px solid #e2e8f0; padding-top: 8px; }
-
-        /* โมดอลป๊อปอัพแสดงผลรูปภาพ */
-        .preview-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start;
-            padding: 16px; overflow-y: auto;
-        }
-        .modal-content {
-            background: #ffffff; padding: 12px; border-radius: 12px; width: 100%; max-width: 420px; text-align: center; margin: auto;
-        }
+        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start; padding: 16px; overflow-y: auto; }
+        .modal-content { background: #ffffff; padding: 12px; border-radius: 12px; width: 100%; max-width: 420px; text-align: center; margin: auto; }
         .modal-content img { width: 100%; height: auto; border: 1px solid #cbd5e1; margin-bottom: 12px; border-radius: 6px; }
-        .close-modal-btn {
-            background: #dc2626; color: white; padding: 12px; border: none; border-radius: 8px;
-            font-weight: bold; font-size: 14px; cursor: pointer; width: 100%;
-        }
-
-        /* โครงสร้างซ่อนสลิปกระดาษขาวเพื่อเตรียมแปลงรูป */
-        #hiddenPrintArea {
-            position: absolute; left: -9999px; top: 0; width: 400px; background: #ffffff; padding: 16px; color: #000000;
-        }
+        .close-modal-btn { background: #dc2626; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; }
+        #hiddenPrintArea { position: absolute; left: -9999px; top: 0; width: 400px; background: #ffffff; padding: 16px; color: #000000; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- โลโก้และชื่อร้าน -->
         <div class="header">
             <div class="logo-title">T&K</div>
             <div class="logo-sub">Electrical Appliance Repair Center</div>
             <div class="tagline">รับซ่อมในสุรินทร์ ทุกอำเภอ • 063-671-8151</div>
         </div>
 
-        <!-- ข้อมูลเลขบิลและวันที่ -->
         <div class="card-section">
             <div class="form-group">
                 <label>เลขที่บิล / No.</label>
@@ -153,75 +54,68 @@
             </div>
         </div>
 
-        <!-- ข้อมูลลูกค้า -->
         <div class="card-section">
             <div class="section-title">ข้อมูลลูกค้า (CUSTOMER INFO)</div>
-            <div class="form-group">
-                <input type="text" id="custName" placeholder="ชื่อ-นามสกุล ลูกค้า">
-            </div>
-            <div class="form-group">
-                <input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์ลูกค้า">
-            </div>
+            <div class="form-group"><input type="text" id="custName" placeholder="ชื่อ-นามสกุล ลูกค้า"></div>
+            <div class="form-group"><input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์ลูกค้า"></div>
             <div class="form-group">
                 <select id="custDistrict">
                     <option value="" disabled selected>-- เลือกอำเภอในสุรินทร์ --</option>
-                    <option>เมืองสุรินทร์</option><option>สังขะ</option><option>ปราสาท</option>
-                    <option>ท่าตูม</option><option>ศีขรภูมิ</option><option>รัตนบุรี</option>
-                    <option>จอมพระ</option><option>กาบเชิง</option><option>ชุมพลบุรี</option>
-                    <option>สนม</option><option>สำโรงทาบ</option><option>บัวเชด</option>
-                    <option>ลำดวน</option><option>อื่นๆ</option>
+                    <option>เมืองสุรินทร์</option><option>สังขะ</option><option>ปราสาท</option><option>ท่าตูม</option><option>ศีขรภูมิ</option><option>รัตนบุรี</option><option>จอมพระ</option><option>กาบเชิง</option><option>อื่นๆ</option>
                 </select>
             </div>
         </div>
 
-        <!-- ข้อมูลอุปกรณ์ -->
         <div class="card-section">
             <div class="section-title">ข้อมูลตัวเครื่อง (DEVICE INFO)</div>
             <div class="form-group">
                 <select id="deviceType">
-                    <option>TV REPAIR (ซ่อมทีวี)</option>
-                    <option>WASHING MACHINE (เครื่องซักผ้า)</option>
-                    <option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
-                    <option>A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
-                    <option>FAN REPAIR (ซ่อมพัดลม)</option>
+                    <option>TV REPAIR (ซ่อมทีวี)</option><option>WASHING MACHINE (เครื่องซักผ้า)</option><option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option><option>A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option><option>FAN REPAIR (ซ่อมพัดลม)</option>
                 </select>
             </div>
-            <div class="form-group">
-                <input type="text" id="deviceModel" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG">
-            </div>
-            <div class="form-group">
-                <input type="text" id="deviceSymptom" placeholder="อาการเสียที่ช่างตรวจพบ">
-            </div>
+            <div class="form-group"><input type="text" id="deviceModel" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG"></div>
+            <div class="form-group"><input type="text" id="deviceSymptom" placeholder="อาการเสียที่ช่างตรวจพบ"></div>
         </div>
 
-        <!-- รายการสินค้าและค่าบริการ -->
         <div class="card-section">
             <div class="section-title">รายการอะไหล่และค่าบริการ (REPAIR ITEMS)</div>
             <div id="itemsContainer">
                 <div class="item-row-card">
                     <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
-                    <input type="text" placeholder="เช่น เปลี่ยนมอเตอร์, ค่าแรงตรวจเช็ค" class="item-name">
+                    <input type="text" placeholder="เช่น เปลี่ยนมอเตอร์, ค่าแรง" class="item-name">
                     <div class="item-grid">
-                        <div>
-                            <label>จำนวน</label>
-                            <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
-                        </div>
-                        <div>
-                            <label>ราคา (บาท)</label>
-                            <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
-                        </div>
+                        <div><label>จำนวน</label><input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()"></div>
+                        <div><label>ราคา (บาท)</label><input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()"></div>
                     </div>
                 </div>
             </div>
             <button type="button" class="btn-secondary" onclick="addItemRow()">+ เพิ่มรายการซ่อม/อะไหล่ใหม่</button>
         </div>
 
-        <!-- ส่วนสรุปยอดเงิน -->
         <div class="card-section">
             <div class="summary-box">
-                <div class="summary-row">
-                    <span>รวมเงิน (Sub Total)</span>
-                    <span id="txtSubTotal" style="font-weight: 600;">0.00 บาท</span>
-                </div>
-                <div class="summary-row">
-                    <span>ส่วนลด (Discount)</span>
+                <div class="summary-row"><span>รวมเงิน (Sub Total)</span><span id="txtSubTotal" style="font-weight: 600;">0.00 บาท</span></div>
+                <div class="summary-row"><span>ส่วนลด (Discount)</span><input type="number" id="inputDiscount" value="0" min="0" oninput="calculateTotal()" style="width: 110px; padding: 6px; text-align: right;"></div>
+                <div class="summary-row total-row"><span>ยอดสุทธิที่ต้องจ่าย</span><span id="txtGrandTotal">0.00 บาท</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button type="button" class="btn-primary" onclick="generateInvoiceImage()">สร้างรูปภาพใบเสร็จเพื่อส่งไลน์</button>
+            <button type="button" class="btn-secondary" onclick="window.location.reload()" style="border-color:#64748b; color:#64748b; margin-top:8px;">ล้างหน้าจอเริ่มต้นใหม่</button>
+        </div>
+    </div>
+
+    <div id="previewModal" class="preview-modal">
+        <div class="modal-content">
+            <h3 style="color: #047857; margin-bottom: 4px; font-size: 17px;">ออกบิลสำเร็จ!</h3>
+            <p style="color: #4b5563; margin-bottom: 12px; font-size: 13px;">👇 กดค้างที่รูปด้านล่างเพื่อ <b>"บันทึกรูป"</b> หรือ <b>"แชร์ส่งไลน์"</b></p>
+            <div id="imageContainer"></div>
+            <button class="close-modal-btn" onclick="closeModal()">❌ ปิดหน้ารูปภาพนี้</button>
+        </div>
+    </div>
+
+    <div id="hiddenPrintArea"></div>
+
+    <!-- ฝันเครื่องมือ html2canvas โค้ดแท้ปลอดภัยในตัว ไม่โหลดจากเน็ต เพื่อให้ผ่านระบบความปลอดภัย GitHub 100% -->
+    <script>
