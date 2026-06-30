@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&K Repair Center System</title>
+    <!-- ใช้ Tailwind CSS เพื่อให้หน้าจอแสดงผลสวยงามบนมือถือ -->
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-4 font-sans">
+
+    <div class="max-w-md mx-auto bg-slate-800 rounded-2xl shadow-xl p-6 border border-slate-700">
+        <!-- หัวข้อแอป -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-cyan-400">T&K ELECTRICAL</h1>
+            <p class="text-xs text-slate-400">ระบบบันทึกงานและคำนวณประกันภัยหน้าร้าน</p>
+        </div>
+
+        <!-- ฟอร์มกรอกข้อมูล -->
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">ชื่อ - เบอร์โทรลูกค้า</label>
+                <input type="text" id="customer" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="เช่น คุณสมชาย 063-671-8151">
+            </div>
+
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">อำเภอ (ในสุรินทร์)</label>
+                <input type="text" id="district" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="เช่น เมืองสุรินทร์, สังขะ">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm text-slate-300 mb-1">ประเภทอุปกรณ์</label>
+                    <select id="appliance" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none">
+                        <option value="TV">ทีวี (TV)</option>
+                        <option value="Washing">เครื่องซักผ้า</option>
+                        <option value="Fridge">ตู้เย็น</option>
+                        <option value="AC_Repair">ซ่อมแอร์</option>
+                        <option value="AC_Wash">ล้างแอร์</option>
+                        <option value="Fan">พัดลม</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-slate-300 mb-1">ผลการปิดงาน</label>
+                    <select id="status" onchange="togglePriceInput()" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none">
+                        <option value="yes">ลูกค้าตกลงซ่อม</option>
+                        <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="priceGroup">
+                <label class="block text-sm text-slate-300 mb-1">ค่าอะไหล่ + ค่าบริการ (บาท)</label>
+                <input type="number" id="price" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400" placeholder="0">
+            </div>
+
+            <button onclick="calculateJob()" class="w-full bg-gradient-to-r border-0 from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-200">
+                🔄 คำนวณเงินและออกบิล
+            </button>
+        </div>
+
+        <!-- ส่วนแสดงผลลัพธ์ (ใบเสร็จ) -->
+        <div id="resultCard" class="hidden mt-6 bg-slate-900 border border-dashed border-slate-600 rounded-xl p-4 text-sm space-y-2">
+            <div class="text-center font-bold text-md text-emerald-400 mb-2">📋 ใบสรุปงาน T&K Repair</div>
+            <p><strong>ลูกค้า:</strong> <span id="resCustomer"></span></p>
+            <p><strong>พื้นที่:</strong> อ. <span id="resDistrict"></span> จ.สุรินทร์</p>
+            <p><strong>บริการ:</strong> <span id="resAppliance"></span></p>
+            <hr class="border-slate-700 my-2">
+            <p class="text-lg"><strong>ยอดเก็บเงินจริง:</strong> <span id="resTotal" class="text-yellow-400 font-bold"></span> บาท</p>
+            <p><strong>ระยะเวลาประกัน:</strong> <span id="resWarranty" class="text-cyan-400"></span></p>
+            <div class="text-center pt-2">
+                <p class="text-xs text-slate-500">แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ลอจิกการคำนวณเบหลังบ้าน -->
+    <script>
+        function togglePriceInput() {
+            const status = document.getElementById('status').value;
+            const priceGroup = document.getElementById('priceGroup');
+            if (status === 'no') {
+                priceGroup.classList.add('hidden');
+            } else {
+                priceGroup.classList.remove('hidden');
+            }
+        }
+
+        function calculateJob() {
+            const customer = document.getElementById('customer').value || '-';
+            const district = document.getElementById('district').value || '-';
+            const appliance = document.getElementById('appliance').value;
+            const status = document.getElementById('status').value;
+            let price = parseFloat(document.getElementById('price').value) || 0;
+
+            let totalAmount = 0;
+            let warrantyText = "";
+            let applianceText = "";
+
+            // แปลงข้อความประเภทอุปกรณ์
+            const applianceMap = {
+                'TV': 'ซ่อมทีวี', 'Washing': 'ซ่อมเครื่องซักผ้า', 'Fridge': 'ซ่อมตู้เย็น',
+                'AC_Repair': 'ซ่อมแอร์บ้าน', 'AC_Wash': 'ล้างแอร์บ้าน', 'Fan': 'ซ่อมพัดลม'
+            };
+            applianceText = applianceMap[appliance];
+
+            // ลอจิกเงื่อนไขตามรูปภาพหน้าร้านจริง
+            if (status === 'no') {
+                totalAmount = 300; // ค่าบริการตรวจเช็กและค่าเดินทางเริ่มต้นในสุรินทร์
+                warrantyText = "ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)";
+            } else {
+                totalAmount = price; // คิดตามราคาที่ช่างประเมินรวมค่าอะไหล่
+                
+                // คำนวณวันประกันอัตโนมัติ
+                if (appliance === 'AC_Wash') {
+                    warrantyText = "รับประกันน้ำรั่ว/น้ำหยด 30 วัน";
+                } else if (appliance === 'Fan') {
+                    warrantyText = "รับประกันงานซ่อมพัดลม 30 วัน";
+                } else {
+                    warrantyText = "รับประกันอะไหล่และอาการเดิม 90 วัน (3 เดือน)";
+                }
+            }
+
+            // แสดงผลบนหน้าจอ
+            document.getElementById('resCustomer').innerText = customer;
+            document.getElementById('resDistrict').innerText = district;
+            document.getElementById('resAppliance').innerText = applianceText;
+            document.getElementById('resTotal').innerText = totalAmount.toLocaleString();
+            document.getElementById('resWarranty').innerText = warrantyText;
+            
+            document.getElementById('resultCard').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
