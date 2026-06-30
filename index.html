@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>T&K Professional Billing</title>
+    <!-- ดึงคลังรหัสช่วยแปลงหน้าจอเป็นรูปภาพ โหลดเร็ว ปลอดภัย -->
+    <script src="https://cloudflare.com"></script>
     <style>
-        /* CSS ตัวเดี่ยวจบในไฟล์ โหลดไว ไม่ดึงจากเน็ต */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         body {
@@ -56,7 +57,6 @@
         .form-group:last-child { margin-bottom: 0; }
         .form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
         
-        /* อินพุตแบบโมเดิร์น เต็มความกว้างจอ ไม่หลุดขอบ */
         input, select {
             width: 100%;
             background: #03070c;
@@ -74,13 +74,12 @@
             background: #050b14;
         }
 
-        /* แก้ไขบั๊กอินพุตวันที่ของแอนดรอยด์/iOS กลืนกับพื้นหลัง */
         input[type="date"] {
             color-scheme: dark;
             color: #fff;
         }
 
-        /* ตารางรายการแบบการ์ด เพื่อให้เหมาะกับมือถือ */
+        /* ตารางรายการแบบการ์ด */
         .item-row-card {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
@@ -122,25 +121,35 @@
         .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #94a3b8; }
         .total-row { font-size: 18px; color: #ffbc00; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: 4px; }
 
-        /* สไตล์หน้าพิมพ์เอกสาร สลับเป็นขาวดำตอนกด Print อัตโนมัติ */
-        @media print {
-            body { background: #fff !important; color: #000 !important; padding: 0; }
-            .no-print { display: none !important; }
-            .app-container { max-width: 100%; border: none !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
-            input, select { border: none !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; appearance: none; }
-            input[type="date"] { color-scheme: light; color: #000 !important; }
-            .card-section { background: none !important; border: 1px solid #000 !important; }
-            .item-row-card { border: 1px solid #ccc !important; background: none !important; color: #000 !important; border-left: 5px solid #000 !important; }
-            .logo-title { color: #000 !important; text-shadow: none !important; }
-            .tagline { border: 1px solid #000 !important; color: #000 !important; background: none !important; }
-            .total-row { color: #000 !important; }
-            #inputDiscount { border: none !important; text-align: right; }
+        /* สไตล์การซ่อนส่วนประกอบเมื่อแปลงไฟล์ */
+        .no-print { display: block; }
+        
+        /* หน้าต่างป๊อปอัพแสดงรูปบิลที่เด้งขึ้นมาเมื่อทำเสร็จ */
+        .preview-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;
+            padding: 20px; overflow-y: auto;
+        }
+        .modal-content {
+            background: #fff; padding: 15px; border-radius: 12px; max-width: 100%; text-align: center;
+            box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+        }
+        .modal-content img { width: 100%; height: auto; border: 1px solid #ccc; margin-bottom: 15px; }
+        .close-modal-btn {
+            background: #ef4444; color: white; padding: 10px 20px; border: none; border-radius: 8px;
+            font-weight: bold; font-size: 14px; cursor: pointer; width: 100%;
+        }
+
+        /* โครงสร้างสำหรับการจัดเรียงข้อมูลรูปภาพ (สะอาดเรียบร้อยสำหรับส่งลูกค้า) */
+        .printable-bill-layout {
+            background: #fff !important; color: #000 !important; padding: 20px; border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <!-- พื้นที่แสดงผลบนแอปมือถือ -->
+    <div class="app-container" id="billingApp">
         
         <!-- Header -->
         <div class="header">
@@ -153,7 +162,7 @@
         <div class="card-section">
             <div class="form-group">
                 <label>เลขที่บิล / No.</label>
-                <input type="text" value="INV-202607001">
+                <input type="text" id="billNo" value="INV-202607001">
             </div>
             <div class="form-group">
                 <label>วันที่ / Date</label>
@@ -165,13 +174,13 @@
         <div class="card-section">
             <div class="section-title"><span>CUSTOMER INFO</span><span>ข้อมูลลูกค้า</span></div>
             <div class="form-group">
-                <input type="text" placeholder="ชื่อ-นามสกุล ลูกค้า">
+                <input type="text" id="custName" placeholder="ชื่อ-นามสกุล ลูกค้า">
             </div>
             <div class="form-group">
-                <input type="tel" placeholder="เบอร์โทรศัพท์">
+                <input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์">
             </div>
             <div class="form-group">
-                <select>
+                <select id="custDistrict">
                     <option value="" disabled selected>เลือกอำเภอ (ในสุรินทร์)</option>
                     <option>เมืองสุรินทร์</option><option>สังขะ</option><option>ปราสาท</option>
                     <option>ท่าตูม</option><option>ศีขรภูมิ</option><option>รัตนบุรี</option>
@@ -186,7 +195,7 @@
         <div class="card-section">
             <div class="section-title"><span>DEVICE INFO</span><span>ข้อมูลตัวเครื่อง</span></div>
             <div class="form-group">
-                <select>
+                <select id="deviceType">
                     <option>TV REPAIR (ซ่อมทีวี)</option>
                     <option>WASHING MACHINE (เครื่องซักผ้า)</option>
                     <option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
@@ -195,10 +204,10 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG">
+                <input type="text" id="deviceModel" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG">
             </div>
             <div class="form-group">
-                <input type="text" placeholder="อาการเสียที่ตรวจพบ">
+                <input type="text" id="deviceSymptom" placeholder="อาการเสียที่ตรวจพบ">
             </div>
         </div>
 
@@ -207,7 +216,6 @@
             <div class="section-title"><span>REPAIR ITEMS</span><span>รายการอะไหล่และค่าบริการ</span></div>
             
             <div id="itemsContainer">
-                <!-- แถวที่ 1 เริ่มต้น -->
                 <div class="item-row-card">
                     <input type="text" placeholder="ชื่ออะไหล่ หรือ ค่าแรงบริการ" class="item-name">
                     <div class="item-grid">
@@ -217,4 +225,3 @@
                         </div>
                         <div class="price-box">
                             <label>ราคา (บาท)</label>
-                            <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
