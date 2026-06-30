@@ -3,161 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K ELECTRICAL</title>
+    <title>T&K ELECTRICAL - Smart Billing System 2026</title>
     <style>
-        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
-        body { background-color: #0f172a; color: #f8fafc; padding: 16px; display: flex; flex-direction: column; align-items: center; }
-        .app-container { width: 100%; max-width: 600px; background-color: #1e293b; border-radius: 16px; padding: 20px; border: 1px solid #334155; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #22d3ee; font-size: 24px; }
-        .header p { color: #94a3b8; font-size: 12px; margin-top: 2px; }
-        .form-group { margin-bottom: 12px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 4px; font-weight: bold; }
-        input, select, textarea { width: 100%; background-color: #334155; border: 1px solid #475569; border-radius: 8px; padding: 10px; color: white; font-size: 14px; outline: none; }
-        textarea { resize: none; height: 70px; }
-        .item-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 40px; gap: 6px; margin-bottom: 8px; align-items: center; }
-        .btn-add { background-color: #10b981; border: none; color: white; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 15px; width: 100%; font-size: 14px; }
-        .btn-del { background-color: #ef4444; border: none; color: white; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-submit { width: 100%; background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%); border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold; padding: 14px; cursor: pointer; margin-top: 10px; }
-        #a4Invoice { display: none; background-color: white; color: black; width: 210mm; min-height: 297mm; padding: 20mm; box-shadow: 0 0 15px rgba(0,0,0,0.5); position: relative; }
-        .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
-        .shop-info h2 { color: #0284c7; font-size: 24px; font-weight: bold; }
-        .shop-info p { font-size: 13px; color: #444; margin-top: 2px; }
+        /* สไตล์หน้าจอป้อนข้อมูลสไตล์แอปยุค 2026 */
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .app-container { width: 100%; max-width: 650px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 24px; padding: 24px; border: 1px solid #334155; margin-bottom: 30px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
+        .header { text-align: center; margin-bottom: 24px; }
+        .header h1 { color: #38bdf8; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { color: #94a3b8; font-size: 13px; margin-top: 4px; }
+        
+        .form-group { margin-bottom: 14px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+        label { display: block; font-size: 12px; color: #38bdf8; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; background-color: #1e293b; border: 1px solid #475569; border-radius: 12px; padding: 12px; color: white; font-size: 14px; outline: none; transition: all 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: #38bdf8; background-color: #0f172a; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
+        textarea { resize: none; height: 75px; }
+        
+        .grid-items { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: 8px; }
+        .btn-print-trigger { background: linear-gradient(135deg, #ea580c 0%, #ca8a04 100%); width: 100%; max-width: 650px; border: none; color: white; padding: 16px; font-size: 16px; font-weight: bold; border-radius: 14px; cursor: pointer; margin-bottom: 25px; text-align: center; box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.3); transition: transform 0.2s; }
+        .btn-print-trigger:active { transform: scale(0.98); }
+
+        /* ----------------------------------------------
+           สไตล์แผ่นบิลใบเสร็จรับเงินขนาด A4 สากลและทันสมัย
+        ---------------------------------------------- */
+        #a4Invoice { display: block; background-color: white; color: #1e293b; width: 210mm; min-height: 297mm; padding: 20mm; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); position: relative; border-radius: 4px; }
+        .invoice-header { display: flex; justify-content: space-between; border-bottom: 3px solid #0284c7; padding-bottom: 20px; margin-bottom: 24px; }
+        .shop-info h2 { color: #0284c7; font-size: 26px; font-weight: 800; }
+        .shop-info p { font-size: 13px; color: #475569; margin-top: 3px; font-weight: 500; }
         .invoice-title { text-align: right; }
-        .invoice-title h1 { font-size: 26px; color: #333; }
-        .invoice-title p { font-size: 13px; margin-top: 4px; color: #444; font-weight: 500; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .client-info { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.6; }
-        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
-        .invoice-table th { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
-        .invoice-table td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
-        .invoice-total { display: flex; justify-content: flex-end; font-size: 15px; font-weight: bold; margin-top: 15px; border-top: 2px solid #cbd5e1; padding-top: 10px; }
-        .invoice-warranty { background-color: #f0fdfa; border: 1px dashed #14b8a6; padding: 12px; border-radius: 6px; margin-top: 15px; text-align: center; color: #0f766e; font-weight: bold; font-size: 13px; }
-        .bank-info { background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 6px; margin-top: 15px; font-size: 13px; color: #1e40af; line-height: 1.5; }
-        .invoice-footer { margin-top: 35px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; text-align: center; font-size: 13px; }
-        .signature-section { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
-        .signature-box { border-top: 1px dashed #000; width: 100%; max-width: 180px; margin-top: 50px; padding-top: 5px; color: #444; }
-        .stamp-zone { font-size: 11px; color: #94a3b8; border: 1px dashed #cbd5e1; padding: 10px 5px; border-radius: 6px; width: 100%; max-width: 180px; margin-bottom: 10px; text-align: center; background-color: #fafafa; }
-        .btn-print-trigger { background-color: #f59e0b; width: 100%; max-width: 600px; border: none; color: white; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; display: none; text-align: center; }
-        .btn-back-trigger { background-color: #475569; width: 100%; max-width: 600px; border: none; color: white; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 10px; display: none; text-align: center; }
+        .invoice-title h1 { font-size: 28px; color: #0f172a; font-weight: 800; letter-spacing: 1px; }
+        .invoice-title p { font-size: 13px; margin-top: 4px; color: #64748b; font-weight: 600; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+        .client-info { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; border-radius: 12px; font-size: 13px; line-height: 1.7; color: #334155; }
+        .client-info strong { color: #0f172a; font-size: 14px; }
+        
+        /* สไตล์ตารางรายงานบนบิล A4 */
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
+        .invoice-table th { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 12px 10px; text-align: left; font-weight: 700; color: #0f172a; }
+        .invoice-table td { border: 1px solid #cbd5e1; padding: 12px 10px; vertical-align: top; color: #334155; }
+        
+        .total-section { display: flex; flex-direction: column; align-items: flex-end; margin-top: 15px; border-top: 2px solid #e2e8f0; padding-top: 12px; font-size: 14px; color: #475569; gap: 6px; }
+        .total-row { display: flex; justify-content: space-between; width: 280px; }
+        .total-row.grand { font-size: 18px; font-weight: 800; color: #0284c7; margin-top: 4px; border-top: 1px solid #cbd5e1; padding-top: 6px; }
+        
+        .invoice-warranty { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px dashed #22c55e; padding: 14px; border-radius: 10px; margin-top: 20px; text-align: center; color: #15803d; font-weight: 700; font-size: 13px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .bank-info { background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%); border: 1px solid #bae6fd; padding: 14px; border-radius: 10px; margin-top: 16px; font-size: 13px; color: #0369a1; line-height: 1.6; }
+        
+        /* พื้นที่เซ็นชื่อและประทับตรา */
+        .invoice-footer { margin-top: 45px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 20px; text-align: center; font-size: 13px; }
+        .signature-section { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        .signature-box { border-top: 1px dashed #64748b; width: 100%; max-width: 180px; margin-top: 55px; padding-top: 6px; color: #334155; font-weight: 600; }
+        .stamp-zone { font-size: 11px; color: #94a3b8; border: 2px dashed #cbd5e1; padding: 12px 5px; border-radius: 10px; width: 100%; max-width: 180px; margin-bottom: 12px; text-align: center; background-color: #fafafa; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
         @media print {
             body { background: white; padding: 0; }
-            .app-container, .btn-print-trigger, .btn-back-trigger { display: none !important; }
-            #a4Invoice { display: block !important; margin: 0; box-shadow: none; width: 100%; }
+            .app-container, .btn-print-trigger { display: none !important; }
+            #a4Invoice { display: block !important; margin: 0; box-shadow: none; width: 100%; padding: 10mm; }
         }
     </style>
 </head>
 <body>
 
-    <!-- หน้าจอป้อนข้อมูลบนมือถือ -->
-    <div id="inputSection" class="app-container">
+    <!-- แผงควบคุมดีไซน์ล้ำสมัย 2026 สำหรับกรอกข้อมูลบนโทรศัพท์มือถือ -->
+    <div class="app-container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบออกบิลขนาด A4 ความเสถียรสูงสุด (เวอร์ชันมือถือโอนไว)</p>
+            <p>Smart Auto-Billing Cloud System (Real-Time 2026)</p>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>ชื่อเจ้าของบ้าน / ลูกค้า</label>
-                <input type="text" id="custName" placeholder="เช่น แม่โม">
+                <input type="text" id="custName" oninput="updateBillData()" placeholder="เช่น พี่ต้อย">
             </div>
             <div class="form-group">
-                <label>เบอร์โทรศัพท์</label>
-                <input type="text" id="custPhone" placeholder="เช่น 0875997735">
+                <label>เบอร์โทรศัพท์ติดต่อ</label>
+                <input type="text" id="custPhone" oninput="updateBillData()" placeholder="เช่น 0969525716">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>อำเภอ (ในจังหวัดสุรินทร์)</label>
-                <input type="text" id="custDist" placeholder="เช่น เมืองสุรินทร์">
+                <input type="text" id="custDist" oninput="updateBillData()" placeholder="เช่น สำโรงทาบ">
             </div>
             <div class="form-group">
-                <label>ผลการปิดงาน</label>
-                <select id="custStatus">
-                    <option value="yes">ลูกค้าตกลงซ่อม</option>
-                    <option value="no">ไม่ซ่อม/ไม่มีอะไหล่ (คิดเฉพาะค่าเดินทาง)</option>
+                <label>ประเภทภาษี (Tax Option)</label>
+                <select id="taxStatus" onchange="updateBillData()">
+                    <option value="none">ไม่มีภาษี (Non-VAT)</option>
+                    <option value="vat7">ภาษีมูลค่าเพิ่ม (VAT 7%)</option>
                 </select>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label>ผู้ตรวจรับงาน / ผู้จ่ายเงิน</label>
-                <input type="text" id="payerName" placeholder="ระบุชื่อผู้จ่ายเงินหน้างาน">
+                <label>ผู้ตรวจรับงาน / ผู้จ่ายเงินหน้างาน</label>
+                <input type="text" id="payerName" oninput="updateBillData()" placeholder="เช่น น้ำติ๊ก">
             </div>
             <div class="form-group">
-                <label>ช่างผู้ตรวจเช็ก / รับเงิน (ผู้ทำงาน)</label>
-                <input type="text" id="techName" placeholder="ระบุชื่อช่าง">
+                <label>วิศวกรช่างซ่อมบำรุง (ผู้ทำงาน)</label>
+                <input type="text" id="techName" oninput="updateBillData()" placeholder="เช่น เต่า">
             </div>
         </div>
-
-        <hr style="border:0; border-top: 1px solid #334155; margin: 15px 0;">
-        
-        <div style="display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 40px; gap: 6px; margin-bottom: 4px;">
-            <label>อุปกรณ์ที่ซ่อม</label>
-            <label>รายละเอียดอะไหล่</label>
-            <label>ราคา/หน่วย</label>
-            <label>จำนวน</label>
-            <div></div>
-        </div>
-        
-        <div id="itemsBlock">
-            <div class="item-row">
-                <select class="item-type">
-                    <option value="TV">ทีวี (TV)</option>
-                    <option value="WashingMachine">เครื่องซักผ้า</option>
-                    <option value="Refrigerator">ตู้เย็น</option>
-                    <option value="ACRepair">ซ่อมแอร์บ้าน</option>
-                    <option value="ACWash">ล้างแอร์บ้าน</option>
-                    <option value="Fan">พัดลม</option>
-                </select>
-                <input type="text" class="item-detail" placeholder="เช่น บอร์ด/แคป">
-                <input type="number" class="item-price" placeholder="บาท" value="0">
-                <input type="number" class="item-qty" placeholder="ชิ้น" value="1">
-                <div></div>
-            </div>
-        </div>
-        <button type="button" onclick="addNewRow()" class="btn-add">➕ เพิ่มรายการงานซ่อม/อะไหล่</button>
 
         <div class="form-group">
-            <label>📝 บันทึกอาการเสียหรือโน้ตเพิ่มเติมท้ายบิล</label>
-            <textarea id="jobDetail" placeholder="ระบุอาการเสีย หรือข้อมูลเพิ่มเติมเพื่อพิมพ์ลงท้ายเอกสาร"></textarea>
+            <label>สถานะข้อตกลงงานซ่อม</label>
+            <select id="custStatus" onchange="updateBillData()">
+                <option value="yes">✅ ลูกค้าตกลงอนุมัติซ่อมแซม (คิดค่าแรง+อะไหล่)</option>
+                <option value="no">❌ ลูกค้าไม่ซ่อม/ไม่มีอะไหล่ (คิดเฉพาะค่าเดินทาง)</option>
+            </select>
         </div>
 
-        <button onclick="generateA4Bill()" class="btn-submit">
-            📄 สร้างบิลขนาด A4
-        </button>
+        <hr style="border:0; border-top: 1px solid #334155; margin: 16px 0;">
+        
+        <div class="grid-items" style="margin-bottom: 4px;">
+            <label>หมวดอุปกรณ์</label>
+            <label>อะไหล่/ชิ้นส่วน</label>
+            <label>ราคา/หน่วย</label>
+            <label>จำนวน</label>
+        </div>
+        
+        <div class="grid-items">
+            <select id="itemType" onchange="updateBillData()">
+                <option value="TV">ทีวี (TV Service)</option>
+                <option value="WashingMachine">เครื่องซักผ้า</option>
+                <option value="Refrigerator">ตู้เย็น</option>
+                <option value="ACRepair">ซ่อมแอร์บ้าน</option>
+                <option value="ACWash">ล้างแอร์บ้าน</option>
+                <option value="Fan">พัดลม</option>
+            </select>
+            <input type="text" id="itemDetail" oninput="updateBillData()" placeholder="เช่น บอด">
+            <input type="number" id="itemPrice" oninput="updateBillData()" placeholder="บาท" value="50">
+            <input type="number" id="itemQty" oninput="updateBillData()" placeholder="ชิ้น" value="1">
+        </div>
+
+        <div class="form-group" style="margin-top: 14px;">
+            <label>📝 รายงานเชิงเทคนิคและการประเมินอาการเสียเพิ่มเติม</label>
+            <textarea id="jobDetail" oninput="updateBillData()" placeholder="ระบุแบรนด์ รุ่น ยี่ห้อ หรืออาการเสียของเครื่องใช้ไฟฟ้าอย่างละเอียด..."></textarea>
+        </div>
     </div>
 
-    <!-- ปุ่มควบคุม -->
-    <button id="printBtn" onclick="window.print()" class="btn-print-trigger">🖨️ กดพิมพ์บิล / บันทึกเป็น PDF ขนาด A4</button>
-    <button id="backBtn" onclick="goBackToInput()" class="btn-back-trigger">⬅️ ย้อนกลับไปแก้ไขข้อมูล</button>
+    <!-- ปุ่มสั่งบันทึกเอกสารพิมพ์เขียวพริ้นเตอร์ -->
+    <button class="btn-print-trigger" onclick="window.print()">🖨️ สั่งพิมพ์บิลเอกสาร / บันทึกเป็นไฟล์ PDF (A4)</button>
 
-    <!-- โครงสร้างบิลกระดาษ A4 -->
-    <div id="a4Invoice">
-        <div class="invoice-header">
-            <div class="shop-info">
-                <h2>T&K ELECTRICAL SERVICE</h2>
-                <p>ศูนย์บริการซ่อมเครื่องใช้ไฟฟ้าทุกชนิด ทั่วจังหวัดสุรินทร์</p>
-                <p>เบอร์โทรศัพท์ / Line: 063-671-8151</p>
-            </div>
-            <div class="invoice-title">
-                <h1>ใบเสร็จรับเงิน</h1>
-                <p>วันที่ออกบิล: <span id="billDate"></span></p>
-                <p>เวลาออกบิล: <span id="billTime"></span> น.</p>
-            </div>
-        </div>
-
-        <div class="info-grid">
-            <div class="client-info">
-                <strong>ข้อมูลผู้รับบริการ / ลูกค้า</strong><br>
-                ชื่อลูกค้า: <span id="lblCustomer"></span><br>
-                เบอร์โทรศัพท์: <span id="lblPhone"></span><br>
-                พื้นที่บริการ: อ. <span id="lblDist"></span> จ.สุรินทร์
-            </div>
-            <div class="client-info">
-                <strong>ข้อมูลเจ้าหน้าที่หน้างาน</strong><br>
-                ผู้ตรวจรับงาน/ผู้จ่ายเงิน: <span id="lblPayer"></span><br>
-                
+    <!-- ----------------------------------------------------
+         ใบเสร็จรับเงิน A4 ตัวจริง (อัปเดตระบบข้อมูลสดตลอดเวลา)
