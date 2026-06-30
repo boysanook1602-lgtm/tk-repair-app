@@ -2,132 +2,178 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&K ELECTRICAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&K Invoice Creator</title>
+    <!-- ใช้ Tailwind CSS สำหรับหน้าตายุคใหม่และรองรับมือถือ -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- ใช้ html2canvas เพื่อแปลงฟอร์มบิลเป็นรูปภาพไว้กดแชร์ -->
+    <script src="https://cloudflare.com"></script>
     <style>
-        /* ลบปุ่มกดและฟอร์มด้านบนทิ้งทั้งหมด เพื่อไม่ให้ระบบมือถือบล็อกโค้ด */
-        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
-        body { background-color: #0f172a; padding: 12px; display: flex; flex-direction: column; align-items: center; }
-        
-        /* แสดงแผ่นบิลกระดาษสีขาวขึ้นมาตั้งแต่แรก 100% ไม่มีหน้าจอขาวโพลน */
-        .invoice-card { background-color: white; color: black; width: 100%; max-width: 550px; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
-        .shop-info h2 { color: #0284c7; font-size: 20px; font-weight: bold; }
-        .shop-info p { font-size: 11px; color: #444; margin-top: 2px; }
-        .invoice-title { text-align: right; }
-        .invoice-title h1 { font-size: 22px; color: #111; font-weight: bold; }
-        .invoice-title p { font-size: 11px; margin-top: 2px; color: #666; }
-        
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .client-box { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; font-size: 12px; line-height: 1.7; }
-        
-        /* ช่องกรอกข้อมูลดีไซน์พิเศษ: แตะแล้วพิมพ์ตัวหนังสือลงไปบนเนื้อกระดาษบิลได้โดยตรง ไม่ต้องกดปุ่มสร้างบิล */
-        input, select { background: #fffdf0; border: none; border-bottom: 1px dashed #0284c7; color: #000; font-size: 13px; padding: 2px 4px; outline: none; width: 70%; font-weight: bold; }
-        input:focus { background-color: #f0f9ff; border-bottom: 2px solid #0284c7; }
-        .w-full-input { width: 100% !important; margin-top: 4px; }
-        
-        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; }
-        .invoice-table th { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 4px; text-align: left; font-weight: bold; }
-        .invoice-table td { border: 1px solid #cbd5e1; padding: 8px 4px; vertical-align: middle; }
-        
-        .bank-info { background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 12px; color: #1e40af; line-height: 1.5; }
-        .invoice-footer { margin-top: 30px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; text-align: center; font-size: 11px; }
-        .signature-box { border-top: 1px dashed #000; width: 100%; padding-top: 5px; margin-top: 35px; font-weight: bold; color: #333; }
-        .stamp-zone { font-size: 10px; color: #94a3b8; border: 1px dashed #cbd5e1; padding: 8px 2px; border-radius: 6px; width: 100%; margin-bottom: 5px; background-color: #fafafa; }
-        .top-tips { color: #94a3b8; font-size: 12px; margin-bottom: 12px; text-align: center; font-weight: bold; }
+        @import url('https://googleapis.com');
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f4f8; }
+        .invoice-box { background: white; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body>
+<body class="p-2 sm:p-4">
 
-    <p class="top-tips">🛠️ ระบบบิลสด T&K: ใช้นิ้วแตะพิมพ์ข้อความลงบนกระดาษได้เลย เสร็จแล้วแคปหน้าจอส่งได้ทันที 100%</p>
+    <!-- ฟอร์มกรอกข้อมูลสำหรับช่าง (ซ่อนตอนแปลงเป็นรูปภาพ) -->
+    <div id="input-form" class="max-w-[500px] mx-auto bg-white p-4 rounded-xl shadow-md mb-4 border border-blue-200">
+        <h2 class="text-lg font-bold text-blue-900 mb-3 text-center">⚙️ กรอกข้อมูลเพื่อออกบิล</h2>
+        
+        <div class="mb-2">
+            <label class="block text-xs font-semibold text-gray-600">ชื่อลูกค้า:</label>
+            <input type="text" id="input-customer" class="w-full p-2 border rounded text-sm focus:outline-none focus:border-blue-500" placeholder="ระบุชื่อลูกค้า">
+        </div>
+        <div class="mb-3">
+            <label class="block text-xs font-semibold text-gray-600">ที่อยู่ / เบอร์โทรลูกค้า:</label>
+            <input type="text" id="input-address" class="w-full p-2 border rounded text-sm focus:outline-none focus:border-blue-500" placeholder="ระบุที่อยู่หรือเบอร์ติดต่อ">
+        </div>
 
-    <!-- ตัวแผ่นกระดาษใบเสร็จจริงที่แสดงผลค้างไว้เลย ไม่เสี่ยงหน้าจอขาว -->
-    <div class="invoice-card">
-        <div class="invoice-header">
-            <div class="shop-info">
-                <h2>T&K ELECTRICAL SERVICE</h2>
-                <p>ศูนย์บริการซ่อมเครื่องใช้ไฟฟ้าทุกชนิด ทั่วจังหวัดสุรินทร์</p>
-                <p>เบอร์โทรศัพท์ / Line: 063-671-8151</p>
-            </div>
-            <div class="invoice-title">
-                <h1>ใบเสร็จรับเงิน</h1>
-                <p>วันที่: <input type="text" style="width:50%;" value="30/06/2026"></p>
-                <p>เวลาออกบิล: <input type="text" style="width:30%;" value="23:55"></p>
+        <hr class="border-gray-200 my-3">
+        
+        <!-- รายการซ่อม -->
+        <div id="items-container">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">รายการที่ 1:</label>
+            <div class="grid grid-cols-12 gap-1 mb-2">
+                <input type="text" placeholder="รายละเอียดซ่อม" class="col-span-6 p-1.5 border rounded text-xs item-desc">
+                <select class="col-span-3 p-1.5 border rounded text-xs item-type">
+                    <option value="TV">TV</option>
+                    <option value="Washing">Washing</option>
+                    <option value="Fridge">Fridge</option>
+                    <option value="A/C">A/C</option>
+                    <option value="Fan">Fan</option>
+                </select>
+                <input type="number" placeholder="ค่าแรง" class="col-span-3 p-1.5 border rounded text-xs item-labor" oninput="calculateTotal()">
             </div>
         </div>
 
-        <div class="info-grid">
-            <div class="client-box">
-                <strong>📥 ข้อมูลผู้รับบริการ / ลูกค้า</strong><br>
-                ชื่อลูกค้า: <input type="text" placeholder="แตะพิมพ์ชื่อตรงนี้" value="พี่ต้อย"><br>
-                เบอร์โทร: <input type="text" placeholder="แตะพิมพ์เบอร์โทร" value="0969525716"><br>
-                พื้นที่: อ. <input type="text" style="width:40%;" placeholder="พิมพ์อำเภอ" value="สำโรงทาบ"> จ.สุรินทร์
+        <button onclick="addItemRow()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-1.5 rounded-lg font-semibold mt-1 mb-4 border border-gray-300">+ เพิ่มรายการซ่อม</button>
+
+        <button onclick="generateInvoice()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">✨ อัปเดตข้อมูลลงบิล</button>
+    </div>
+
+    <!-- พื้นที่แสดงตัวบิลจริง (ส่วนนี้จะถูกแปลงเป็นรูปส่ง Line) -->
+    <div id="invoice-card" class="invoice-box rounded-2xl relative overflow-hidden">
+        
+        <!-- ส่วนหัวบิลสไตล์ T&K -->
+        <div class="flex items-start justify-between border-b-2 border-blue-900 pb-3">
+            <div class="w-1/4">
+                <!-- โลโก้จำลองวงกลมตามป้ายร้าน -->
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-900 to-cyan-700 rounded-full flex flex-col items-center justify-center text-white border-2 border-cyan-400 shadow-inner">
+                    <span class="text-xs font-bold leading-none tracking-tight">T&K</span>
+                    <span class="text-[6px] text-cyan-200 mt-0.5">REPAIR</span>
+                </div>
             </div>
-            <div class="client-box">
-                <strong>👷 ข้อมูลเจ้าหน้าที่หน้างาน</strong><br>
-                ผู้จ่ายเงิน: <input type="text" placeholder="พิมพ์ชื่อผู้จ่ายเงิน" value="น้ำติ๊ก"><br>
-                ช่างผู้ซ่อม: <input type="text" placeholder="พิมพ์ชื่อช่าง" value="เต่า"><br>
-                ผลการงาน: <input type="text" style="width:50%;" value="ตกลงซ่อม">
+            <div class="w-3/4 text-right">
+                <h1 class="text-sm font-bold text-blue-900 tracking-wide uppercase">T&K Electrical Appliance Repair Center</h1>
+                <p class="text-[10px] text-gray-500 font-semibold">SERVICE INVOICE / ใบเสร็จรับเงิน</p>
+                <p class="text-[10px] text-gray-600 mt-1">📞 Tel: 063-671-8151</p>
+                <p class="text-[10px] text-gray-600">💬 Line: 063-671-8151</p>
             </div>
         </div>
 
-        <table class="invoice-table">
+        <!-- ข้อมูลลูกค้าและวันที่ -->
+        <div class="grid grid-cols-2 gap-2 text-[11px] my-3 text-gray-700 bg-blue-50/50 p-2 rounded-lg">
+            <div>
+                <p><span class="font-semibold text-blue-900">Customer Name:</span> <span id="lbl-customer">-</span></p>
+                <p><span class="font-semibold text-blue-900">Address:</span> <span id="lbl-address">-</span></p>
+            </div>
+            <div class="text-right">
+                <p><span class="font-semibold text-blue-900">Date:</span> <span id="lbl-date">-</span></p>
+                <p><span class="font-semibold text-blue-900">No:</span> <span id="lbl-inv-no">TK-001</span></p>
+            </div>
+        </div>
+
+        <!-- ตารางรายการบิล -->
+        <table class="w-full text-left border-collapse text-[11px] mt-2">
             <thead>
-                <tr>
-                    <th style="width: 8%; text-align: center;">ลำดับ</th>
-                    <th style="width: 47%;">รายการบริการ / รายละเอียดอะไหล่ชิ้นส่วน</th>
-                    <th style="width: 15%; text-align: right;">ราคา/หน่วย</th>
-                    <th style="width: 10%; text-align: center;">จำนวน</th>
-                    <th style="width: 20%; text-align: right;">รวม (บาท)</th>
+                <tr class="bg-blue-900 text-white text-[10px]">
+                    <th class="p-2 w-12 text-center rounded-l-md">Item #</th>
+                    <th class="p-2">Description</th>
+                    <th class="p-2 text-center w-16">Type</th>
+                    <th class="p-2 text-right w-20 rounded-r-md">Labor / Price</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="invoice-rows" class="divide-y divide-gray-100">
+                <!-- ข้อมูลจะถูกเพิ่มเข้ามาจากฟังก์ชันสคริปต์ -->
                 <tr>
-                    <td style="text-align: center;">1</td>
-                    <td>
-                        <!-- เปลี่ยนเป็นช่องข้อความให้ช่างใช้นิ้วพิมพ์ได้อิสระ ไม่ต้องกังวลปุ่มกดค้าง -->
-                        <input type="text" class="w-full-input" style="border-bottom:none;" value="งานบริการซ่อมตู้เย็น (เปลี่ยนแคปตรงรุ่น)">
-                    </td>
-                    <td style="text-align: right;"><input type="text" style="text-align:right; width:95%; border-bottom:none;" value="500.00"></td>
-                    <td style="text-align: center;"><input type="text" style="text-align:center; width:95%; border-bottom:none;" value="1"></td>
-                    <td style="text-align: right; font-weight: bold; padding-right:5px;"><input type="text" style="text-align:right; width:95%; border-bottom:none;" value="500.00"></td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;">-</td>
-                    <td colspan="4">
-                        <strong>📌 บันทึกรายงานเพิ่มเติมจากช่าง:</strong><br>
-                        <input type="text" class="w-full-input" placeholder="ใช้นิ้วแตะเพื่อพิมพ์บันทึกข้อความตรงนี้ได้เลย..." value="ซ่อมระบบไฟเสร็จเรียบร้อย ตรวจเช็กการทำงานปกติ">
-                    </td>
+                    <td class="p-2 text-center text-gray-400" colspan="4">ยังไม่มีข้อมูลรายการซ่อม</td>
                 </tr>
             </tbody>
         </table>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 14px; border-top:2px solid #cbd5e1; padding-top:10px;">
-            <span>เงื่อนไขประกัน: <input type="text" style="width:75%; border-bottom:none; color:#059669;" value="รับประกันอะไหล่และอาการเดิม 90 วัน"></span>
-            <span>ยอดสุทธิ: <input type="text" style="text-align:right; width:50px; border-bottom:none; color:#c2410c; font-size:16px;" value="500"> บาท</span>
+        <!-- ส่วนสรุปเงิน บัญชีธนาคาร และตราประทับ -->
+        <div class="mt-4 pt-3 border-t border-gray-200 grid grid-cols-12 gap-2">
+            <!-- ข้อมูลบัญชีธนาคารกรุงไทยของคุณ -->
+            <div class="col-span-7 border border-blue-200 p-2 rounded-xl bg-blue-50/30 text-[10px] text-gray-700 relative">
+                <p class="font-semibold text-blue-900 mb-0.5">💰 ช่องทางชำระเงิน (Payment Details)</p>
+                <p class="font-bold text-gray-900">ธนาคารกรุงไทย</p>
+                <p class="text-blue-700 font-bold text-xs tracking-wider">662-9-44252-0</p>
+                <p class="text-gray-500">ชื่อบัญชี: นาย ธนกร ส.</p>
+                
+                <!-- ตราประทับดิจิทัลจำลองวงกลมสวยๆ ทับอยู่มุมล่างบิลตามแบบ -->
+                <div class="absolute right-1 bottom-1 w-14 h-14 border-2 border-dashed border-red-500/40 rounded-full flex flex-col items-center justify-center text-[7px] text-red-500/50 font-bold transform rotate-12 pointer-events-none">
+                    <span>T&K REPAIR</span>
+                    <span class="text-[5px]">รับซ่อม-รับประกัน</span>
+                </div>
+            </div>
+            
+            <!-- สรุปราคารวม -->
+            <div class="col-span-5 flex flex-col justify-end text-right text-[11px]">
+                <div class="flex justify-between font-semibold text-gray-600">
+                    <span>Subtotal:</span>
+                    <span id="lbl-subtotal">฿0.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-blue-900 text-sm mt-1 border-t border-gray-300 pt-1">
+                    <span>Total:</span>
+                    <span id="lbl-total">฿0.00</span>
+                </div>
+            </div>
         </div>
 
-        <div class="bank-info">
-            <strong>💳 ช่องทางการชำระเงินผ่านธนาคาร:</strong><br>
-            ธนาคาร: <strong>กรุงไทย (Krungthai Bank)</strong> &nbsp;&nbsp;|&nbsp;&nbsp; เลขที่บัญชี: <strong>662-9-44252-0</strong><br>
-            ชื่อบัญชี: <strong>นาย ประสงค์ นันตะบุตร</strong>
-        </div>
-
-        <div class="invoice-footer">
-            <div class="signature-section">
-                <div class="stamp-zone">พื้นที่ประทับตราจริง</div>
-                <div class="signature-box">ผู้รับเงิน / ร้านค้า</div>
-            </div>
-            <div class="signature-section">
-                <p style="font-weight: bold; color: #0284c7; min-height:18px;"><input type="text" style="text-align:center; border-bottom:none;" value="ช่างเต่า"></p>
-                <div class="signature-box">ช่างผู้ซ่อมบำรุง</div>
-            </div>
-            <div class="signature-section">
-                <p style="font-weight: bold; color: #0284c7; min-height:18px;"><input type="text" style="text-align:center; border-bottom:none;" value="น้ำติ๊ก"></p>
-                <div class="signature-box">ผู้ตรวจรับงาน / ลูกค้า</div>
-            </div>
-        </div>
+        <div class="text-center text-[8px] text-gray-400 mt-6 tracking-wider">** ขอบคุณที่ใช้บริการ T&K Electrical Appliance Repair Center **</div>
     </div>
 
-</body>
-</html>
+    <!-- ปุ่มกดบันทึกรูปภาพเพื่อส่งแชร์ต่อใน Line -->
+    <div class="max-w-[500px] mx-auto mt-4">
+        <button onclick="shareAsImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            🟢 บันทึกเป็นรูปภาพเพื่อส่งแชร์เข้า Line
+        </button>
+    </div>
+
+    <!-- สคริปต์ทำงานเบหลังบ้าน -->
+    <script>
+        let rowCount = 1;
+
+        // ฟังก์ชันตั้งค่าวันที่ปัจจุบันอัตโนมัติเมื่อเปิดแอป
+        window.onload = function() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('lbl-date').innerText = dateStr;
+            
+            // สุ่มเลขที่บิลจำลอง
+            document.getElementById('lbl-inv-no').innerText = 'TK-' + Math.floor(1000 + Math.random() * 9000);
+        };
+
+        // ฟังก์ชันเพิ่มแถวกรอกข้อมูลรายการซ่อม
+        function addItemRow() {
+            rowCount++;
+            const container = document.getElementById('items-container');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-12 gap-1 mb-2';
+            div.innerHTML = `
+                <input type="text" placeholder="รายละเอียดซ่อม" class="col-span-6 p-1.5 border rounded text-xs item-desc">
+                <select class="col-span-3 p-1.5 border rounded text-xs item-type">
+                    <option value="TV">TV</option>
+                    <option value="Washing">Washing</option>
+                    <option value="Fridge">Fridge</option>
+                    <option value="A/C">A/C</option>
+                    <option value="Fan">Fan</option>
+                </select>
+                <input type="number" placeholder="ค่าแรง" class="col-span-3 p-1.5 border rounded text-xs item-labor" oninput="calculateTotal()">
+            `;
+            container.appendChild(div);
+        }
+
+        // ฟังก์ชันอัปเดตข้อมูลขึ้นหน้าบิล
+        function generateInvoice() {
