@@ -2,155 +2,220 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Billing System</title>
-    <!-- Tailwind CSS -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <!-- Google Fonts (Anuphan) -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T&K Professional Billing</title>
     <style>
+        /* CSS ตัวเดี่ยวจบในไฟล์ ไม่ดึงจากเน็ตเพื่อความเร็วสูงสุด */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
         body {
-            font-family: 'Anuphan', sans-serif;
-            background: radial-gradient(circle at top, #0d1b2a 0%, #020813 100%);
-            color: #e0e1dd;
+            background: #060b13;
+            color: #e2e8f0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        /* Anime Glitch & Glow Effects */
-        .neon-border {
-            box-shadow: 0 0 15px rgba(0, 180, 216, 0.2), inset 0 0 15px rgba(0, 180, 216, 0.1);
-            border: 1px solid rgba(0, 180, 216, 0.4);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+        /* เอฟเฟกต์อนิเมะ Matrix Glow บิลค่อยๆ เรืองแสงและขยายตัวขึ้นตอนเปิด */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: linear-gradient(145deg, #0b1524, #070d18);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            animation: animeSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        .neon-border:focus-within {
-            box-shadow: 0 0 25px rgba(0, 180, 216, 0.6), inset 0 0 10px rgba(0, 180, 216, 0.2);
-            border-color: #00b4d8;
+
+        @keyframes animeSpawn {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); filter: brightness(2); }
+            to { opacity: 1; transform: scale(1) translateY(0); filter: brightness(1); }
         }
-        .anime-btn {
+
+        /* ส่วนหัวแอป */
+        .header { text-align: center; margin-bottom: 20px; position: relative; }
+        .logo-title { font-size: 28px; font-weight: 900; color: #00f2fe; text-shadow: 0 0 10px rgba(0,242,254,0.5); letter-spacing: 2px; }
+        .logo-sub { font-size: 10px; color: #708090; tracking: 1px; text-transform: uppercase; margin-top: 2px; }
+        .tagline { font-size: 11px; background: rgba(0, 242, 254, 0.1); color: #00f2fe; display: inline-block; padding: 3px 10px; border-radius: 10px; margin-top: 6px; border: 1px solid rgba(0, 242, 254, 0.2); }
+
+        /* จัดฟอร์มแบ่งโซนสวยงาม */
+        .card-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .section-title { font-size: 13px; color: #38bdf8; font-weight: 600; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        
+        .form-group { margin-bottom: 12px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+        
+        /* อินพุตแบบโมเดิร์น เต็มความกว้างจอ ไม่หลุดขอบ */
+        input, select {
+            width: 100%;
+            background: #03070c;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00f2fe;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+            background: #050b14;
+        }
+
+        /* ตารางรายการแบบการ์ด เพื่อให้เหมาะกับมือถือ */
+        .item-row-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00f2fe;
             position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
         }
-        .anime-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.6s ease;
+        .item-grid { display: flex; gap: 8px; margin-top: 6px; }
+        .qty-box { flex: 1; }
+        .price-box { flex: 2; }
+        
+        .btn-delete {
+            position: absolute; right: 10px; top: 8px;
+            background: none; border: none; color: #ef4444; font-size: 12px; cursor: pointer;
         }
-        .anime-btn:hover::after {
-            left: 100%;
+
+        /* เอฟเฟกต์ปุ่มกดสไตล์ชาร์จพลังอนิเมะ (Anime Power Charge) */
+        .btn-primary {
+            width: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe);
+            color: #000; border: none; border-radius: 10px; padding: 12px;
+            font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+            text-transform: uppercase;
         }
-        .anime-btn:active {
-            transform: scale(0.95);
+        .btn-primary:active { transform: scale(0.97); filter: brightness(1.2); }
+
+        .btn-secondary {
+            width: 100%; background: #1e293b; color: #cbd5e1;
+            border: none; border-radius: 10px; padding: 10px; margin-top: 8px;
+            font-size: 13px; cursor: pointer; transition: all 0.2s;
         }
-        /* Entrance Animation */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in-up {
-            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        /* Print Styles Override */
+        .btn-secondary:active { background: #334155; }
+
+        /* สรุปยอดเงิน */
+        .summary-box { display: flex; flex-direction: column; gap: 6px; margin-top: 15px; padding-top: 12px; border-t: 1px dashed rgba(255,255,255,0.1); }
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #94a3b8; }
+        .total-row { font-size: 18px; color: #ffbc00; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 4px; }
+
+        /* สไตล์หน้าพิมพ์เอกสาร บังคับตัดเป็นขาวดำสวยเป็นระเบียบ */
         @media print {
-            body { background: white !important; color: black !important; }
+            body { background: #fff !important; color: #000 !important; padding: 0; }
             .no-print { display: none !important; }
-            .print-container { box-shadow: none !important; border: none !important; background: white !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
-            .print-text-dark { color: #1a1a1a !important; }
-            .print-border { border: 1px solid #333 !important; }
-            .print-bg-gray { background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            input, select, textarea { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; appearance: none; }
+            .app-container { max-width: 100%; border: none !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
+            input, select { border: none !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; appearance: none; }
+            .card-section { background: none !important; border: 1px solid #000 !important; }
+            .item-row-card { border: 1px solid #ccc !important; background: none !important; color: #000 !important; }
+            .logo-title { color: #000 !important; text-shadow: none !important; }
+            .tagline { border: 1px solid #000 !important; color: #000 !important; background: none !important; }
+            .total-row { color: #000 !important; }
         }
     </style>
 </head>
-<body class="min-h-screen py-10 px-4 md:px-0">
+<body>
 
-    <div class="max-w-4xl mx-auto bg-[#0b132b]/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl neon-border fade-in-up print-container">
+    <div class="app-container">
         
-        <!-- Header / Logo Section -->
-        <div class="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/50 pb-6 mb-6 print-border">
-            <div class="text-center md:text-left mb-4 md:mb-0">
-                <div class="text-3xl font-extrabold tracking-wider text-cyan-400 flex items-center justify-center md:justify-start gap-2">
-                    <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i> T&K
-                </div>
-                <div class="text-xs tracking-widest text-cyan-200/60 uppercase font-medium">Electrical Appliance Repair Center</div>
-                <div class="text-xs text-gray-400 mt-1 print-text-dark"><i class="fa-solid fa-location-dot text-cyan-500"></i> รับซ่อมในสุรินทร์ ทุกอำเภอ</div>
-                <div class="text-xs text-gray-400 print-text-dark"><i class="fa-solid fa-phone text-cyan-500"></i> 063-671-8151</div>
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-title">T&K</div>
+            <div class="logo-sub">Electrical Appliance Repair Center</div>
+            <div class="tagline">รับซ่อมในสุรินทร์ ทุกอำเภอ • 063-671-8151</div>
+        </div>
+
+        <!-- Meta Info -->
+        <div class="card-section">
+            <div class="form-group">
+                <label>เลขที่บิล / No.</label>
+                <input type="text" value="INV-202607001">
             </div>
-            <div class="text-center md:text-right">
-                <h1 class="text-2xl font-bold text-white tracking-wide uppercase print-text-dark">ใบเสร็จรับเงิน / ใบแจ้งหนี้</h1>
-                <p class="text-xs text-cyan-400 font-mono mt-1 print-text-dark">เลขที่ / No. <input type="text" value="INV-202607001" class="bg-transparent border-b border-cyan-800 text-cyan-300 w-32 text-center focus:outline-none font-mono print-text-dark"></p>
-                <p class="text-xs text-gray-400 font-mono mt-1 print-text-dark">วันที่ / Date: <input type="date" id="currentDate" class="bg-transparent text-gray-300 focus:outline-none print-text-dark"></p>
+            <div class="form-group">
+                <label>วันที่ / Date</label>
+                <input type="date" id="billDate">
             </div>
         </div>
 
-        <!-- Customer & Device Info -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Customer Section -->
-            <div class="p-4 bg-[#1c2541]/40 rounded-xl border border-cyan-950 print-bg-gray print-border">
-                <h3 class="text-sm font-semibold text-cyan-400 mb-3 print-text-dark"><i class="fa-solid fa-user-gear mr-2"></i> ข้อมูลลูกค้า (Customer Info)</h3>
-                <div class="space-y-2 text-sm">
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ชื่อลูกค้า:</span>
-                        <input type="text" placeholder="ชื่อ-นามสกุล" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">เบอร์โทร:</span>
-                        <input type="text" placeholder="08X-XXXXXXX" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">อำเภอ:</span>
-                        <select class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                            <option value="เมืองสุรินทร์">เมืองสุรินทร์</option>
-                            <option value="สังขะ">สังขะ</option>
-                            <option value="ปราสาท">ปราสาท</option>
-                            <option value="ท่าตูม">ท่าตูม</option>
-                            <option value="รัตนบุรี">รัตนบุรี</option>
-                            <option value="ศีขรภูมิ">ศีขรภูมิ</option>
-                            <option value="จอมพระ">จอมพระ</option>
-                            <option value="ชุมพลบุรี">ชุมพลบุรี</option>
-                            <option value="สนม">สนม</option>
-                            <option value="สำโรงทาบ">สำโรงทาบ</option>
-                            <option value="กาบเชิง">กาบเชิง</option>
-                            <option value="พนมดงรัก">พนมดงรัก</option>
-                            <option value="ศรีณรงค์">ศรีณรงค์</option>
-                            <option value="เขวาสินรินทร์">เขวาสินรินทร์</option>
-                            <option value="โนนนารายณ์">โนนนารายณ์</option>
-                            <option value="บัวเชด">บัวเชด</option>
-                            <option value="ลำดวน">ลำดวน</option>
-                        </select>
-                    </div>
-                </div>
+        <!-- Customer Section -->
+        <div class="card-section">
+            <div class="section-title"><span>CUSTOMER INFO</span><span>ข้อมูลลูกค้า</span></div>
+            <div class="form-group">
+                <input type="text" placeholder="ชื่อ-นามสกุล ลูกค้า">
             </div>
-
-            <!-- Device Section -->
-            <div class="p-4 bg-[#1c2541]/40 rounded-xl border border-cyan-950 print-bg-gray print-border">
-                <h3 class="text-sm font-semibold text-cyan-400 mb-3 print-text-dark"><i class="fa-solid fa-screwdriver-wrench mr-2"></i> ข้อมูลตัวเครื่อง (Device Info)</h3>
-                <div class="space-y-2 text-sm">
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ประเภทงาน:</span>
-                        <select class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                            <option value="TV REPAIR">TV REPAIR (ซ่อมทีวี)</option>
-                            <option value="WASHING MACHINE">WASHING MACHINE (ซ่อมเครื่องซักผ้า)</option>
-                            <option value="FRIDGE REPAIR">FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
-                            <option value="A/C REPAIR & SERVICE">A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
-                            <option value="FAN REPAIR">FAN REPAIR (ซ่อมพัดลม)</option>
-                        </select>
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">ยี่ห้อ/รุ่น:</span>
-                        <input type="text" placeholder="เช่น SAMSUNG, LG, SONY" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-gray-400 w-20 shrink-0 print-text-dark">อาการเสีย:</span>
-                        <input type="text" placeholder="อาการที่ช่างตรวจพบ" class="w-full bg-[#0b132b]/60 border border-cyan-900/50 rounded px-2 py-1 text-white focus:outline-none focus:border-cyan-500 print-text-dark">
-                    </div>
-                </div>
+            <div class="form-group">
+                <input type="tel" placeholder="เบอร์โทรศัพท์">
+            </div>
+            <div class="form-group">
+                <select>
+                    <option value="" disabled selected>เลือกอำเภอ (ในสุรินทร์)</option>
+                    <option>เมืองสุรินทร์</option><option>สังขะ</option><option>ปราสาท</option>
+                    <option>ท่าตูม</option><option>ศีขรภูมิ</option><option>รัตนบุรี</option>
+                    <option>จอมพระ</option><option>กาบเชิง</option><option>อื่นๆ</option>
+                </select>
             </div>
         </div>
 
-        <!-- Service & Parts Items Table -->
+        <!-- Device Section -->
+        <div class="card-section">
+            <div class="section-title"><span>DEVICE INFO</span><span>ข้อมูลตัวเครื่อง</span></div>
+            <div class="form-group">
+                <select>
+                    <option>TV REPAIR (ซ่อมทีวี)</option>
+                    <option>WASHING MACHINE (เครื่องซักผ้า)</option>
+                    <option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
+                    <option>A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
+                    <option>FAN REPAIR (ซ่อมพัดลม)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="อาการเสียที่ตรวจพบ">
+            </div>
+        </div>
+
+        <!-- Items List -->
+        <div class="card-section">
+            <div class="section-title"><span>REPAIR ITEMS</span><span>รายการอะไหล่และค่าบริการ</span></div>
+            
+            <div id="itemsContainer">
+                <!-- แถวที่ 1 เริ่มต้น -->
+                <div class="item-row-card">
+                    <input type="text" placeholder="ชื่ออะไหล่ หรือ ค่าแรงบริการ" class="item-name">
+                    <div class="item-grid">
+                        <div class="qty-box">
+                            <label>จำนวน</label>
+                            <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
+                        </div>
+                        <div class="price-box">
+                            <label>ราคา (บาท)</label>
+                            <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-secondary no-print" onclick="addItemRow()">+ เพิ่มรายการอะไหล่/ค่าบริการ</button>
+        </div>
+
+        <!-- Summary -->
+        <div class="card-section">
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>รวมเงิน (Sub Total)</span>
