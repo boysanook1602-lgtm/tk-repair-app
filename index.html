@@ -44,7 +44,7 @@
         .shop-info p { font-size: 13px; color: #444; margin-top: 2px; }
         .invoice-title { text-align: right; }
         .invoice-title h1 { font-size: 26px; color: #333; }
-        .invoice-title p { font-size: 14px; margin-top: 5px; }
+        .invoice-title p { font-size: 13px; margin-top: 4px; color: #444; font-weight: 500; }
         
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .client-info { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.6; }
@@ -80,7 +80,7 @@
     <div class="app-container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบออกบิลขนาด A4 พร้อมข้อมูลธนาคารและพื้นที่ประทับตรา</p>
+            <p>ระบบออกบิลขนาด A4 บันทึกวันและเวลาอัตโนมัติ</p>
         </div>
 
         <div class="form-row">
@@ -114,7 +114,7 @@
                 <input type="text" id="payerName" placeholder="ระบุชื่อผู้จ่ายเงินหน้างาน">
             </div>
             <div class="form-group">
-                <label>ช่างผู้ตรวจเช็ก / รับเงิน</label>
+                <label>ช่างผู้ตรวจเช็ก / รับเงิน (ผู้ทำงาน)</label>
                 <input type="text" id="techName" placeholder="ระบุชื่อช่าง">
             </div>
         </div>
@@ -172,12 +172,11 @@
             </div>
             <div class="invoice-title">
                 <h1>ใบเสร็จรับเงิน</h1>
-                <p>วันที่: <span id="billDate"></span></p>
+                <p>วันที่ออกบิล: <span id="billDate"></span></p>
+                <p>เวลาออกบิล: <span id="billTime"></span> น.</p>
             </div>
         </div>
 
         <div class="info-grid">
             <div class="client-info">
                 <strong>ข้อมูลผู้รับบริการ / ลูกค้า</strong><br>
-                ชื่อลูกค้า: <span id="lblCustomer"></span><br>
-                เบอร์โทรศัพท์: <span id="lblPhone"></span><br>
