@@ -11,7 +11,6 @@
     <style>
         @import url('https://googleapis.com');
         
-        /* ตกแต่งพื้นหลังแอปให้อ่านง่าย สบายตา ไม่มืดจม */
         body { 
             font-family: 'Sarabun', sans-serif; 
             background-color: #f1f5f9; 
@@ -19,277 +18,179 @@
             padding: 10px;
             margin: 0;
         }
+        .container { max-width: 500px; margin: auto; }
         
-        .container {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        /* กล่องเมนูสลับหน้าบิล */
-        .tab-menu {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+        /* สไตล์ปุ่มเมนูหลัก */
+        .tab-menu { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn {
-            flex: 1;
-            padding: 12px;
-            font-size: 13px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background-color: #cbd5e1;
-            color: #334155;
-            transition: 0.2s;
+            flex: 1; padding: 12px; font-size: 13px; font-weight: bold;
+            border: none; border-radius: 8px; cursor: pointer;
+            background-color: #cbd5e1; color: #334155;
         }
-        .tab-btn.active {
-            background-color: #0284c7;
-            color: white;
-            box-shadow: 0 4px 6px rgba(2, 132, 199, 0.2);
-        }
+        .tab-btn.active { background-color: #0284c7; color: white; }
 
-        /* กล่องฟอร์มกรอกข้อมูลการซ่อม */
+        /* สไตล์กล่องฟอร์มกรอกข้อมูล */
         .form-zone {
-            background-color: white;
-            padding: 16px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
+            background-color: white; padding: 16px; border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #e2e8f0;
         }
         .form-title {
-            font-size: 15px;
-            font-weight: bold;
-            color: #0369a1;
-            margin-top: 0;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 6px;
+            font-size: 14px; font-weight: bold; color: #0369a1;
+            margin-top: 0; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;
         }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .form-row > div {
-            flex: 1;
-        }
-        label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            margin-bottom: 4px;
-        }
+        .form-group { margin-bottom: 10px; }
+        .form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .form-row > div { flex: 1; }
+        label { display: block; font-size: 11px; font-weight: 600; color: #64748b; margin-bottom: 4px; }
         
-        /* ช่องกรอกข้อมูลสีขาวเด่นชัด */
+        /* ช่องกรอกข้อมูลสีขาวสว่างเด่นชัด */
         input[type="text"], input[type="number"], textarea {
-            width: 100%;
-            padding: 8px 10px;
-            font-size: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            color: #0f172a;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #0284c7;
+            width: 100%; padding: 8px 10px; font-size: 12px;
+            border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;
+            background-color: #ffffff; color: #0f172a;
         }
 
-        .btn-add {
-            width: 100%;
-            background-color: #f8fafc;
-            color: #475569;
-            border: 1px dashed #cbd5e1;
-            padding: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 5px;
+        .btn-action {
+            width: 100%; padding: 12px; font-size: 13px; font-weight: bold;
+            border: none; border-radius: 8px; cursor: pointer; margin-top: 5px;
         }
+        .btn-blue { background-color: #0284c7; color: white; }
+        .btn-green { background-color: #059669; color: white; margin-top: 15px; margin-bottom: 15px; }
 
-        /* 📄 ดีไซน์กระดาษใบเสร็จที่พร้อมถ่ายรูปส่งให้ลูกค้า */
+        /* 📄 พื้นที่โครงสร้างบิลเงินสดพิมพ์ลายกระดาษ */
         .invoice-paper { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            color: #1e293b;
-            border: 1px solid #e2e8f0;
+            background: white; padding: 20px; border-radius: 12px;
+            color: #1e293b; border: 1px solid #cbd5e1;
         }
-        .bill-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-b: 2px solid #cbd5e1;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
-        }
-        .bill-title {
-            font-size: 16px;
-            font-weight: 800;
-            color: #1e3a8a;
-            margin: 0;
-        }
-        .info-grid {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
+        .bill-title { font-size: 16px; font-weight: 800; color: #1e3a8a; margin: 0; }
+        .info-grid { display: flex; gap: 8px; margin-top: 10px; margin-bottom: 10px; }
         .info-card {
-            flex: 1;
-            border: 1px solid #e2e8f0;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 10px;
-            background-color: #f8fafc;
+            flex: 1; border: 1px solid #e2e8f0; padding: 6px;
+            border-radius: 6px; font-size: 10px; background-color: #f8fafc;
         }
-        .card-title {
-            font-weight: bold;
-            color: #1e3a8a;
-            margin: 0 0 4px 0;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 2px;
-        }
+        .card-title { font-weight: bold; color: #1e3a8a; margin: 0 0 2px 0; border-bottom: 1px solid #e2e8f0; }
         
-        /* ตารางสรุปราคาบิล */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-            margin-top: 5px;
-        }
-        th {
-            background-color: #1e3a8a;
-            color: white;
-            padding: 6px;
-            font-size: 10px;
-            text-align: left;
-        }
-        td {
-            padding: 6px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .text-right { text-align: right; }
-        .text-center { text-align: center; }
-
-        .note-box {
-            margin-top: 10px;
-            background-color: #f8fafc;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            font-size: 9px;
-        }
-
-        .bill-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
+        th { background-color: #1e3a8a; color: white; padding: 6px; font-size: 10px; text-align: left; }
+        td { padding: 6px; border-bottom: 1px solid #f1f5f9; }
+        
         .bank-box {
-            border: 1px solid #bfdbfe;
-            padding: 8px;
-            border-radius: 8px;
-            background-color: #eff6ff;
-            font-size: 9px;
-            width: 60%;
+            border: 1px solid #bfdbfe; padding: 8px; border-radius: 8px;
+            background-color: #eff6ff; font-size: 9px; width: 60%; float: left;
         }
-        .total-box {
-            text-align: right;
-            width: 35%;
-        }
-        .total-price {
-            font-size: 18px;
-            font-weight: 900;
-            color: #d97706;
-        }
+        .total-box { text-align: right; width: 35%; float: right; padding-top: 5px; }
+        .total-price { font-size: 18px; font-weight: 900; color: #d97706; }
 
-        /* 🟢 ปุ่มสีเขียวสำหรับกดเซฟรูปภาพลงมือถือ */
-        .btn-capture {
-            width: 100%;
-            background: linear-gradient(to right, #059669, #0d9488);
-            color: white;
-            font-weight: bold;
-            padding: 14px;
-            font-size: 13px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-top: 15px;
-            margin-bottom: 30px;
+        /* 🖼️ กล่องแสดงรูปภาพผลลัพธ์สุดท้าย */
+        .preview-zone {
+            background-color: #fee2e2; border: 2px dashed #f87171; padding: 12px;
+            border-radius: 10px; text-align: center; margin-top: 15px; margin-bottom: 40px;
         }
+        #result-image { max-width: 100%; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 🧭 สลับหน้าจอทำบิลระหว่างลูกค้า กับ สั่งอะไหล่ -->
+        <!-- 🧭 เมนูหลักสลับบิลซ่อม / บิลสั่งอะไหล่ -->
         <div class="tab-menu">
-            <button id="tab-repair" onclick="switchMode('repair')" class="tab-btn active">🔧 บิลซ่อมเครื่องใช้ไฟฟ้า</button>
-            <button id="tab-parts" onclick="switchMode('parts')" class="tab-btn">📦 บิลสั่งซื้ออะไหล่ร้าน</button>
+            <button id="tab-repair" onclick="switchMode('repair')" class="tab-btn active">🔧 บิลซ่อมลูกค้า</button>
+            <button id="tab-parts" onclick="switchMode('parts')" class="tab-btn">📦 บิลสั่งซื้ออะไหล่</button>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 1. [ฟอร์มกรอก] - ระบบบิลซ่อมเครื่องใช้ไฟฟ้า -->
-        <!-- ========================================================================= -->
+        <!-- ฟอร์มกรอกข้อมูลบิลซ่อม -->
         <div id="form-repair-zone" class="form-zone">
-            <div class="form-title">📝 ข้อมูลสำหรับออกบิลซ่อมลูกค้า</div>
-            
+            <div class="form-title">📝 กรอกข้อมูลบิลซ่อมลูกค้า</div>
             <div class="form-group">
-                <label>ชื่อผู้รับบริการ / ลูกค้า:</label>
-                <input type="text" id="rep-customer" oninput="updateInvoiceDisplay()" placeholder="เช่น พี่ต้อย">
+                <label>ชื่อลูกค้า:</label>
+                <input type="text" id="rep-customer" placeholder="เช่น พี่ต้อย">
             </div>
             <div class="form-row">
                 <div>
                     <label>เบอร์โทรศัพท์:</label>
-                    <input type="text" id="rep-phone" oninput="updateInvoiceDisplay()" placeholder="เช่น 0969525716">
+                    <input type="text" id="rep-phone" placeholder="เช่น 0969525716">
                 </div>
                 <div>
                     <label>พื้นที่ / อำเภอ จังหวัด:</label>
-                    <input type="text" id="rep-address" oninput="updateInvoiceDisplay()" placeholder="เช่น อ.สำโรงทาบ จ.สุรินทร์">
+                    <input type="text" id="rep-address" placeholder="เช่น อ.สำโรงทาบ จ.สุรินทร์">
                 </div>
             </div>
             <div class="form-row">
                 <div>
-                    <label>ผู้จ่ายงาน / เจ้าหน้าที่:</label>
-                    <input type="text" id="rep-staff" oninput="updateInvoiceDisplay()" placeholder="เช่น น้ำติ๊ก">
+                    <label>ผู้จ่ายงาน:</label>
+                    <input type="text" id="rep-staff" placeholder="เช่น น้ำติ๊ก">
                 </div>
                 <div>
-                    <label>ช่างผู้รับผิดชอบ:</label>
-                    <input type="text" id="rep-mechanic" oninput="updateInvoiceDisplay()" placeholder="เช่น ช่างเต่า">
+                    <label>ช่างผู้ซ่อม:</label>
+                    <input type="text" id="rep-mechanic" placeholder="เช่น ช่างเต่า">
                 </div>
             </div>
-            
-            <div style="margin-top: 10px;">
-                <label>รายการบริการ / รายละเอียดอะไหล่ชิ้นส่วน:</label>
-                <div id="rep-items-list">
-                    <div class="form-row" style="margin-bottom: 5px;">
-                        <input type="text" placeholder="ระบุรายการบริการซ่อม/อะไหล่" style="flex: 6;" class="rep-item-desc" oninput="updateInvoiceDisplay()">
-                        <input type="number" placeholder="ราคา" style="flex: 3; text-align: right;" class="rep-item-price" oninput="updateInvoiceDisplay()">
-                        <input type="number" placeholder="ตัว" value="1" style="flex: 2; text-align: center;" class="rep-item-qty" oninput="updateInvoiceDisplay()">
-                    </div>
-                </div>
-                <button onclick="addRepairItemRow()" class="btn-add">+ เพิ่มแถวรายการซ่อมเพิ่ม</button>
+            <div class="form-row">
+                <div style="flex: 7;"><label>รายละเอียดซ่อม</label><input type="text" id="rep-desc-1" placeholder="เช่น งานซ่อมตู้เย็น"></div>
+                <div style="flex: 3;"><label>ราคา (บาท)</label><input type="number" id="rep-price-1" placeholder="เช่น 600"></div>
             </div>
-
-            <div class="form-group" style="margin-top: 10px;">
-                <label>บันทึกรายงานเพิ่มเติมจากช่าง / เงื่อนไขประกัน:</label>
-                <textarea id="rep-note" rows="2" oninput="updateInvoiceDisplay()" placeholder="เช่น ซ่อมระบบไฟเสร็จเรียบร้อย ตรวจเช็คการทำงานปกติ..."></textarea>
+            <div class="form-group">
+                <label>บันทึกรายงานเพิ่มเติม / ประกัน:</label>
+                <textarea id="rep-note" rows="2" placeholder="เช่น รับประกันอะไหล่ระบบไฟ 3 เดือน..."></textarea>
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 2. [ฟอร์มกรอก] - ระบบบิลสั่งซื้ออะไหล่ร้าน (ซ่อนไว้เริ่มต้น) -->
-        <!-- ========================================================================= -->
+        <!-- ฟอร์มกรอกข้อมูลบิลสั่งอะไหล่ -->
+        <div id="form-parts-zone" class="form-zone" style="display: none;">
+            <div class="form-title" style="color: #b45309;">📦 กรอกข้อมูลสั่งซื้ออะไหล่ร้าน</div>
+            <div class="form-row">
+                <div>
+                    <label>สั่งซื้อจากร้าน:</label>
+                    <input type="text" id="part-supplier" placeholder="เช่น ร้านอะไหล่กรุงเทพ">
+                </div>
+                <div>
+                    <label>ผู้จัดซื้อ:</label>
+                    <input type="text" id="part-buyer" placeholder="เช่น ช่างประสงค์">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>สั่งเพื่อเคสงานซ่อมของลูกค้าคนไหน:</label>
+                <input type="text" id="part-purpose" placeholder="เช่น อะไหล่ตู้เย็นคุณพี่ต้อย อ.สำโรงทาบ">
+            </div>
+            <div class="form-row">
+                <div style="flex: 7;"><label>ชื่อชิ้นส่วนอะไหล่ที่สั่ง</label><input type="text" id="part-desc-1" placeholder="เช่น คอมเพรสเซอร์ตู้เย็น"></div>
+                <div style="flex: 3;"><label>ราคา (บาท)</label><input type="number" id="part-price-1" placeholder="เช่น 1200"></div>
+            </div>
+            <div class="form-group">
+                <label>หมายเหตุความเร่งด่วน:</label>
+                <input type="text" id="part-note" placeholder="เช่น ด่วนมาก ลูกค้ารอใช้งาน">
+            </div>
+        </div>
+
+        <button onclick="processAndRenderInvoice()" class="btn-action btn-blue">⚙️ กดเพื่อส่งข้อมูลเข้าตัวบิลด้านล่าง</button>
+
+        <!-- 📄 ตัวใบเสร็จต้นฉบับสำหรับระบบถ่ายภาพ -->
+        <div id="invoice-capture-zone" style="background-color: white; padding: 5px; margin-top: 15px; border-radius: 8px;">
+            <div class="invoice-paper">
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #cbd5e1; padding-bottom: 6px;">
+                    <div style="width: 65%;">
+                        <h1 id="bill-header-title" class="bill-title">ELECTRICAL SERVICE</h1>
+                        <p style="font-size: 9px; color: #64748b; margin: 2px 0 0 0;">ศูนย์บริการซ่อมเครื่องใช้ไฟฟ้าทุกชนิด ทั่วจังหวัดสุรินทร์</p>
+                        <p style="font-size: 9px; color: #1e3a8a; margin: 4px 0 0 0; font-weight: bold;">📞 โทร / Line: 063-671-8151</p>
+                    </div>
+                    <div style="width: 35%; text-align: right; font-size: 9px; color: #475569; line-height: 1.3;">
+                        <p><strong>วันที่:</strong> <span id="lbl-date">-</span></p>
+                        <p><strong>เลขที่บิล:</strong> <span id="lbl-inv-no" style="font-weight: bold; color: #1e3a8a; background-color: #f1f5f9; padding: 1px 3px; border-radius: 3px;">-</span></p>
+                    </div>
+                </div>
+
+                <div id="info-cards-container" class="info-grid">
+                    <!-- ข้อมูลลูกค้าจะมาโชว์ตรงนี้ -->
+                </div>
+
+                <table>
+                    <thead>
+                        <tr id="table-header-row" style="background-color: #1e3a8a; color: white;">
+                            <th class="text-center" style="width: 10%;">ลำดับ</th>
+                            <th style="width: 65%;">รายละเอียดรายการ</th>
+                            <th class="text-right" style="width: 25%;">รวมเงิน (บาท)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-rows">
+                        <tr><td colspan="3" class="text-center" style="color: #94a3b8; padding: 10px;">กรอกข้อมูลแล้วกดปุ่มสีฟ้าด้านบน</td></tr>
+                    </tbody>
