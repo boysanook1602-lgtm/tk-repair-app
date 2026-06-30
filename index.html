@@ -15,7 +15,6 @@
         label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 4px; }
         input, select { width: 100%; background-color: #334155; border: 1px solid #475569; border-radius: 8px; padding: 10px; color: white; font-size: 15px; outline: none; }
         .btn-submit { width: 100%; background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%); border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold; padding: 12px; cursor: pointer; margin-top: 10px; }
-        /* สไตล์กล่องใบเสร็จ */
         .result-card { display: none; margin-top: 20px; background-color: #0f172a; border: 1px dashed #475569; border-radius: 12px; padding: 15px; }
         .result-title { text-align: center; font-weight: bold; color: #10b981; margin-bottom: 12px; border-bottom: 1px dashed #334155; padding-bottom: 8px; }
         .result-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
@@ -33,17 +32,17 @@
 
         <div class="form-group">
             <label>ชื่อ - เบอร์โทรลูกค้า</label>
-            <input type="text" id="customer" placeholder="เช่น แม่โม 0875997735">
+            <input type="text" id="custName" placeholder="เช่น แม่โม 0875997735">
         </div>
 
         <div class="form-group">
             <label>อำเภอ (ในจังหวัดสุรินทร์)</label>
-            <input type="text" id="district" placeholder="เช่น เมืองสุรินทร์">
+            <input type="text" id="custDist" placeholder="เช่น เมืองสุรินทร์">
         </div>
 
         <div class="form-group">
             <label>ประเภทอุปกรณ์</label>
-            <select id="appliance">
+            <select id="custType">
                 <option value="ซ่อมทีวี">ทีวี (TV)</option>
                 <option value="ซ่อมเครื่องซักผ้า">เครื่องซักผ้า</option>
                 <option value="ซ่อมตู้เย็น">ตู้เย็น</option>
@@ -55,7 +54,7 @@
 
         <div class="form-group">
             <label>ผลการปิดงาน</label>
-            <select id="status">
+            <select id="custStatus">
                 <option value="yes">ลูกค้าตกลงซ่อม</option>
                 <option value="no">ไม่ซ่อม/ไม่มีอะไหล่</option>
             </select>
@@ -63,65 +62,53 @@
 
         <div class="form-group">
             <label>ค่าอะไหล่ + ค่าบริการ (บาท)</label>
-            <input type="number" id="price" placeholder="ถ้าตกลงซ่อม ให้ใส่จำนวนเงินที่นี่">
+            <input type="number" id="custPrice" placeholder="ถ้าตกลงซ่อม ให้ใส่จำนวนเงินที่นี่">
         </div>
 
-        <button onclick="runProgram()" class="btn-submit">
+        <!-- ปรับปรุงปุ่มใหม่ให้ทำงานทันทีโดยไม่ผ่านฟังก์ชันแยกป้องกันบั๊ก -->
+        <button onclick="
+            var name = document.getElementById('custName').value || 'ลูกค้าทั่วไป';
+            var dist = document.getElementById('custDist').value || '-';
+            var type = document.getElementById('custType').value;
+            var status = document.getElementById('custStatus').value;
+            var price = document.getElementById('custPrice').value || 0;
+            var total = 0;
+            var war = '';
+
+            if (status === 'no') {
+                total = 300;
+                war = 'ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)';
+            } else {
+                total = price;
+                if (type === 'ล้างแอร์บ้าน' || type === 'ซ่อมพัดลม') {
+                    war = 'รับประกันงานหลังทำ 30 วัน';
+                } else {
+                    war = 'รับประกันอะไหล่และอาการเดิม 90 วัน (3 เดือน)';
+                }
+            }
+
+            document.getElementById('outName').innerText = name;
+            document.getElementById('outDist').innerText = dist;
+            document.getElementById('outType').innerText = type;
+            document.getElementById('outTotal').innerText = Number(total).toLocaleString();
+            document.getElementById('outWar').innerText = war;
+            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        " class="btn-submit">
             🔄 คำนวณเงินและออกบิล
         </button>
 
-        <!-- ส่วนใบเสร็จที่จะเด้งออกมา -->
+        <!-- ส่วนใบเสร็จสรุปงาน -->
         <div id="resultCard" class="result-card">
             <div class="result-title">📋 ใบสรุปงาน T&K Repair</div>
-            <div class="result-item"><span>ลูกค้า:</span><span id="resCustomer"></span></div>
-            <div class="result-item"><span>พื้นที่:</span><span>อ. <span id="resDistrict"></span> จ.สุรินทร์</span></div>
-            <div class="result-item"><span>งานบริการ:</span><span id="resAppliance"></span></div>
-            <div class="total-price"><span>ยอดที่ต้องเก็บเงิน:</span><span><span id="resTotal" style="color:#f59e0b;"></span> บาท</span></div>
-            <div class="warranty-box" id="resWarranty"></div>
+            <div class="result-item"><span>ลูกค้า:</span><span id="outName"></span></div>
+            <div class="result-item"><span>พื้นที่:</span><span>อ. <span id="outDist"></span> จ.สุรินทร์</span></div>
+            <div class="result-item"><span>งานบริการ:</span><span id="outType"></span></div>
+            <div class="total-price"><span>ยอดที่ต้องเก็บเงิน:</span><span><span id="outTotal" style="color:#f59e0b;"></span> บาท</span></div>
+            <div class="warranty-box" id="outWar"></div>
             <p style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">📸 แคปหน้าจอนี้ส่งให้ลูกค้าทาง Line ได้ทันที</p>
         </div>
     </div>
 
-    <script>
-        function runProgram() {
-            // ดึงค่าจากฟอร์ม
-            var customer = document.getElementById('customer').value;
-            var district = document.getElementById('district').value;
-            var appliance = document.getElementById('appliance').value;
-            var status = document.getElementById('status').value;
-            var price = document.getElementById('price').value;
-
-            // ตรวจสอบค่าว่างเบื้องต้น
-            if (!customer) { customer = "ลูกค้าทั่วไป"; }
-            if (!district) { district = "-"; }
-
-            var total = 0;
-            var warranty = "";
-
-            // คำนวณตามเงื่อนไขร้าน
-            if (status === "no") {
-                total = 300; // ค่าตรวจเช็ก/เดินทางเริ่มต้น
-                warranty = "ไม่มีการรับประกัน (เนื่องจากไม่ได้ซ่อม)";
-            } else {
-                total = price ? price : 0;
-                
-                if (appliance === "ล้างแอร์บ้าน" || appliance === "ซ่อมพัดลม") {
-                    warranty = "รับประกันงานหลังทำ 30 วัน";
-                } else {
-                    warranty = "รับประกันอะไหล่และอาการเดิม 90 วัน (3 เดือน)";
-                }
-            }
-
-            // แสดงค่าในใบเสร็จ
-            document.getElementById('resCustomer').innerText = customer;
-            document.getElementById('resDistrict').innerText = district;
-            document.getElementById('resAppliance').innerText = appliance;
-            document.getElementById('resTotal').innerText = Number(total).toLocaleString();
-            document.getElementById('resWarranty').innerText = warranty;
-
-            // สั่งเปิดกล่องใบเสร็จให้มองเห็น
-            document.getElementById('resultCard').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
