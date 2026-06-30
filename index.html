@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&K ELECTRICAL - Database Live Bill</title>
+    <title>T&K ELECTRICAL</title>
     <style>
         * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
         body { background-color: #0f172a; color: #f8fafc; padding: 12px; display: flex; flex-direction: column; align-items: center; }
@@ -20,14 +20,14 @@
         
         .grid-items { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: 6px; }
 
-        /* แผงปุ่มควบคุม */
+        /* ปุ่มควบคุม */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
         .btn-action { border: none; padding: 12px 6px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
         .btn-save { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
         .btn-share { background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); }
         .btn-reset { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
 
-        /* สไตล์บิล A4 ด้านล่าง */
+        /* สไตล์บิลด้านล่าง */
         #a4Invoice { display: block !important; background-color: white; color: black; width: 100%; max-width: 550px; padding: 16px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-bottom: 20px; }
         .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
         .shop-info h2 { color: #0284c7; font-size: 18px; font-weight: bold; }
@@ -54,38 +54,38 @@
         .signature-box { border-top: 1px dashed #000; width: 100%; padding-top: 4px; margin-top: 35px; font-weight: bold; }
         .stamp-zone { font-size: 10px; color: #94a3b8; border: 1px dashed #cbd5e1; padding: 6px 2px; border-radius: 6px; width: 100%; margin-bottom: 6px; background-color: #fafafa; }
 
-        /* สไตล์ส่วนกล่องเก็บประวัติประวัติในมือถือ */
+        /* ประวัติงานซ่อม */
         .db-container { width: 100%; max-width: 550px; background-color: #1e293b; border-radius: 16px; padding: 16px; border: 1px solid #334155; }
         .db-title { font-size: 14px; font-weight: bold; color: #38bdf8; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .db-list { max-height: 200px; overflow-y: auto; }
-        .db-item { background-color: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 6px; font-size: 12px; border-left: 4px solid #10b981; }
+        .db-item { background-color: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 6px; font-size: 12px; border-left: 4px solid #10b981; color: white; }
         .btn-clear-db { background: none; border: none; color: #ef4444; font-size: 11px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- 1. ส่วนฟอร์มกรอกข้อมูลด้านบน -->
-    <form id="billForm" class="app-container" onsubmit="return false;">
+    <div class="app-container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบบิลดิจิทัล Real-Time (เชื่อมโยงระบบบันทึกฐานข้อมูลมือถือถาวร)</p>
+            <p>ระบบบิลด่วน Real-Time อัปเดตข้อมูลแม่นยำ 100%</p>
         </div>
 
+        <!-- เพิ่มช่องทางดักจับการพิมพ์แบบคู่ขนานเพื่อความชัวร์บนมือถือ -->
         <div class="form-row">
             <div>
                 <label>ชื่อลูกค้า</label>
-                <input type="text" id="custName" oninput="updateBill()" placeholder="เช่น พี่ต้อย">
+                <input type="text" id="custName" oninput="updateBill()" onkeyup="updateBill()" placeholder="เช่น พี่ต้อย">
             </div>
             <div>
                 <label>เบอร์โทรศัพท์</label>
-                <input type="text" id="custPhone" oninput="updateBill()" placeholder="เช่น 0969525716">
+                <input type="text" id="custPhone" oninput="updateBill()" onkeyup="updateBill()" placeholder="เช่น 0969525716">
             </div>
         </div>
 
         <div class="form-row">
             <div>
                 <label>อำเภอ (ในจังหวัดสุรินทร์)</label>
-                <input type="text" id="custDist" oninput="updateBill()" placeholder="เช่น สำโรงทาบ">
+                <input type="text" id="custDist" oninput="updateBill()" onkeyup="updateBill()" placeholder="เช่น สำโรงทาบ">
             </div>
             <div>
                 <label>ข้อตกลงงานซ่อม</label>
@@ -99,11 +99,11 @@
         <div class="form-row">
             <div>
                 <label>ผู้จ่ายเงินหน้างาน</label>
-                <input type="text" id="payerName" oninput="updateBill()" placeholder="เช่น น้ำติ๊ก">
+                <input type="text" id="payerName" oninput="updateBill()" onkeyup="updateBill()" placeholder="เช่น น้ำติ๊ก">
             </div>
             <div>
                 <label>ช่างผู้ซ่อม (ผู้ทำงาน)</label>
-                <input type="text" id="techName" oninput="updateBill()" placeholder="เช่น เต่า">
+                <input type="text" id="techName" oninput="updateBill()" onkeyup="updateBill()" placeholder="เช่น เต่า">
             </div>
         </div>
 
@@ -123,17 +123,16 @@
                 <option value="ACWash">ล้างแอร์</option>
                 <option value="Fan">พัดลม</option>
             </select>
-            <input type="text" id="itemDetail" oninput="updateBill()" placeholder="ระบุอะไหล่" value="แคป">
-            <input type="number" id="itemPrice" oninput="updateBill()" value="500">
-            <input type="number" id="itemQty" oninput="updateBill()" value="1">
+            <input type="text" id="itemDetail" oninput="updateBill()" onkeyup="updateBill()" placeholder="ระบุอะไหล่" value="แคป">
+            <input type="number" id="itemPrice" oninput="updateBill()" onkeyup="updateBill()" value="500">
+            <input type="number" id="itemQty" oninput="updateBill()" onkeyup="updateBill()" value="1">
         </div>
 
         <div class="form-group" style="margin-top: 10px;">
             <label>📝 โน้ตเพิ่มเติมท้ายบิล</label>
-            <textarea id="jobDetail" oninput="updateBill()" placeholder="ระบุอาการเสีย หรือข้อมูลเพิ่มเติม..."></textarea>
+            <textarea id="jobDetail" oninput="updateBill()" onkeyup="updateBill()" placeholder="ระบุอาการเสีย หรือข้อมูลเพิ่มเติม..."></textarea>
         </div>
 
-        <!-- แผง 3 ปุ่มควบคุม -->
         <div class="btn-group">
             <button class="btn-action btn-save" onclick="saveToDevice()">💾 บันทึกประวัติลงมือถือ</button>
             <button class="btn-action btn-share" onclick="shareInvoice()">🔗 กดแชร์ส่งเข้า Line</button>
@@ -141,9 +140,9 @@
         </div>
     </form>
 
-    <p style="color:#94a3b8; font-size:12px; margin-bottom:10px; text-align:center;">👇 ใบเสร็จอัปเดตอัตโนมัติอยู่ด้านล่าง กรอกเสร็จแล้วกดบันทึกหรือแคปจอได้เลย 👇</p>
+    <p style="color:#94a3b8; font-size:12px; margin-bottom:10px; text-align:center;">👇 ใบเสร็จอัปเดตอัตโนมัติอยู่ด้านล่าง กรอกเสร็จแล้วแคปจอได้เลย 👇</p>
 
-    <!-- 2. ตัวกระดาษใบเสร็จที่แสดงผลสดตลอดเวลา -->
+    <!-- หน้าบิลกระดาษ A4 -->
     <div id="a4Invoice">
         <div class="invoice-header">
             <div class="shop-info">
@@ -172,6 +171,4 @@
             </div>
         </div>
 
-        <table class="invoice-table">
-            <thead>
-                <tr>
+        
