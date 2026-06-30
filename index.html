@@ -59,6 +59,13 @@
         .print-button { background: #10b981; color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
         .print-button:hover { background: #059669; }
         
+        .signature-area { display: flex; justify-content: space-around; margin-top: 20px; font-size: 11px; }
+        .signature-box { text-align: center; flex: 1; }
+        .signature-line { border-top: 1px solid #000; margin-top: 30px; padding-top: 4px; min-width: 80px; }
+        
+        .bank-info { background: #e0f2fe; border-left: 4px solid #0284c7; padding: 10px; margin: 10px 0; border-radius: 4px; font-size: 11px; }
+        .bank-info div { margin: 3px 0; }
+        
         @media print {
             body { background: white; }
             .preview-modal { background: white; display: block !important; position: static; }
@@ -158,7 +165,7 @@
         </div>
 
         <div style="margin-top: 15px;">
-            <button type="button" class="btn-primary" onclick="processInvoiceNow()">✨ ออกใบเสร็จรับเงินสำเร็จรูป</button>
+            <button type="button" class="btn-primary" onclick="processInvoiceNow()">✨ ออกใบเสร็จรับเงินสำ��ร็จรูป</button>
         </div>
     </div>
 
@@ -228,11 +235,35 @@
                 </div>
             </div>
 
+            <!-- ข้อมูลธนาคาร -->
+            <div class="bank-info">
+                <div><strong>💳 ข้อมูลการโอนเงิน:</strong></div>
+                <div>ธนาคาร: กรุงไทย</div>
+                <div>เลขที่บัญชี: 6629442520</div>
+                <div>ชื่อบัญชี: นายประสงค์ นันตะบุตร</div>
+            </div>
+
             <!-- ส่วนท้ายเอกสาร -->
             <div style="text-align: center; font-size: 10px; color: #64748b; margin-top: 12px; padding-top: 10px; border-top: 1px solid #cbd5e1;">
                 <p style="margin: 4px 0;">ขอบคุณที่ใช้บริการ T&K Electrical Repair</p>
                 <p style="margin: 4px 0;">Thank you for using our service</p>
                 <p style="margin: 4px 0; font-weight: 600;">สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้</p>
+            </div>
+
+            <!-- พื้นที่เซ็นต์และตราประทับ -->
+            <div class="signature-area">
+                <div class="signature-box">
+                    <div style="font-size: 10px; margin-bottom: 5px;">ลูกค้า</div>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-box">
+                    <div style="font-size: 10px; margin-bottom: 5px;">ช่าง/ตรวจสอบ</div>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-box">
+                    <div style="font-size: 10px; margin-bottom: 5px;">ตราประทับ</div>
+                    <div style="height: 50px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; margin-top: 5px; font-size: 9px; color: #94a3b8;">[ ตราประทับ ]</div>
+                </div>
             </div>
 
             <button type="button" class="print-button" onclick="window.print()">🖨️ พิมพ์ใบเสร็จ</button>
@@ -247,7 +278,7 @@
             document.getElementById('billDate').value = today;
         });
 
-        // ฟังก์ชันเพิ่มรายการซ่อมใหม่
+        // ฟังก์ชันเพิ่มรา��การซ่อมใหม่
         function addItemRow() {
             const container = document.getElementById('itemsContainer');
             const newRow = document.createElement('div');
