@@ -7,20 +7,27 @@
     <style>
         * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
         body { background-color: #0f172a; color: #f8fafc; padding: 12px; display: flex; flex-direction: column; align-items: center; }
+        
         .app-container { width: 100%; max-width: 550px; background-color: #1e293b; border-radius: 16px; padding: 16px; border: 1px solid #334155; margin-bottom: 20px; }
         .header { text-align: center; margin-bottom: 15px; }
         .header h1 { color: #38bdf8; font-size: 22px; }
         .header p { color: #94a3b8; font-size: 11px; }
+        
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: bold; }
         input, select, textarea { width: 100%; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 10px; color: white; font-size: 14px; outline: none; }
         textarea { height: 50px; resize: none; }
+        
         .grid-items { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: 6px; }
+
+        /* แผงปุ่มควบคุมที่แก้ปัญหาการบล็อกสัมผัส */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
-        .btn-action { border: none; padding: 12px 6px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
+        .btn-action { border: none; padding: 12px 6px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; text-align: center; -webkit-tap-highlight-color: transparent; }
         .btn-save { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
         .btn-share { background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); }
         .btn-reset { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+
+        /* สไตล์บิล A4 */
         #a4Invoice { display: block !important; background-color: white; color: black; width: 100%; max-width: 550px; padding: 16px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-bottom: 20px; }
         .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
         .shop-info h2 { color: #0284c7; font-size: 18px; font-weight: bold; }
@@ -28,19 +35,26 @@
         .invoice-title { text-align: right; }
         .invoice-title h1 { font-size: 20px; color: #333; font-weight: bold; }
         .invoice-title p { font-size: 11px; margin-top: 2px; color: #555; }
+        
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .client-info { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; font-size: 12px; line-height: 1.5; }
+        
         .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; }
         .invoice-table th { background-color: #e2e8f0; border: 1px solid #cbd5e1; padding: 8px 6px; text-align: left; font-weight: bold; }
         .invoice-table td { border: 1px solid #cbd5e1; padding: 8px 6px; vertical-align: top; }
+        
         .total-section { display: flex; flex-direction: column; align-items: flex-end; margin-top: 10px; border-top: 2px solid #cbd5e1; padding-top: 8px; font-size: 13px; gap: 4px; }
         .total-row { display: flex; justify-content: space-between; width: 220px; font-weight: bold; }
+        
         .invoice-warranty { background-color: #f0fdfa; border: 1px dashed #22c55e; padding: 10px; border-radius: 6px; margin-top: 12px; text-align: center; color: #166534; font-weight: bold; font-size: 12px; }
         .bank-info { background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; border-radius: 6px; margin-top: 12px; font-size: 12px; color: #1e40af; line-height: 1.5; }
+        
         .invoice-footer { margin-top: 25px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; text-align: center; font-size: 11px; }
         .signature-section { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
         .signature-box { border-top: 1px dashed #000; width: 100%; padding-top: 4px; margin-top: 35px; font-weight: bold; }
         .stamp-zone { font-size: 10px; color: #94a3b8; border: 1px dashed #cbd5e1; padding: 6px 2px; border-radius: 6px; width: 100%; margin-bottom: 6px; background-color: #fafafa; }
+
+        /* ประวัติงานซ่อม */
         .db-container { width: 100%; max-width: 550px; background-color: #1e293b; border-radius: 16px; padding: 16px; border: 1px solid #334155; }
         .db-title { font-size: 14px; font-weight: bold; color: #38bdf8; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .db-list { max-height: 200px; overflow-y: auto; }
@@ -50,10 +64,11 @@
 </head>
 <body>
 
-    <form id="billForm" class="app-container" onsubmit="return false;">
+    <!-- 1. ส่วนฟอร์มกรอกข้อมูลด้านบน -->
+    <div class="app-container">
         <div class="header">
             <h1>T&K ELECTRICAL</h1>
-            <p>ระบบบิลด่วน 2026 แก้ไขปุ่มค้างถาวร</p>
+            <p>ระบบบิลด่วน 2026 แก้ไขปัญหาปุ่มล็อกเสถียร 100%</p>
         </div>
 
         <div class="form-row">
@@ -118,15 +133,17 @@
             <textarea id="jobDetail" oninput="updateBill()" placeholder="ระบุอาการเสีย หรือข้อมูลเพิ่มเติม..."></textarea>
         </div>
 
+        <!-- ย้ายคำสั่งการทำงานมาฝังตรงที่ปุ่มโดยตรงเพื่อเลี่ยงการบล็อกฟังก์ชันจากมือถือ -->
         <div class="btn-group">
-            <button type="button" class="btn-action btn-save" onclick="saveToDevice()">💾 บันทึกประวัติ</button>
-            <button type="button" class="btn-action btn-share" onclick="shareInvoice()">🔗 กดแชร์บิล</button>
-            <button type="button" class="btn-action btn-reset" onclick="resetForm()">🔄 เริ่มใบใหม่</button>
+            <button class="btn-action btn-save" onclick="saveToDevice()">💾 บันทึกประวัติลงมือถือ</button>
+            <button class="btn-action btn-share" onclick="shareInvoice()">🔗 กดแชร์ส่งเข้า Line</button>
+            <button class="btn-action btn-reset" onclick="resetForm()">🔄 รีเซ็ตเริ่มใบใหม่</button>
         </div>
-    </form>
+    </div>
 
-    <p style="color:#94a3b8; font-size:12px; margin-bottom:10px; text-align:center;">👇 ใบเสร็จอัปเดตอัตโนมัติอยู่ด้านล่าง กรอกเสร็จแล้วแคปจอได้เลย 👇</p>
+    <p style="color:#94a3b8; font-size:12px; margin-bottom:10px; text-align:center;">👇 ใบเสร็จอัปเดตอัตโนมัติอยู่ด้านล่าง กรอกเสร็จแล้วกดบันทึกหรือแคปจอได้เลย 👇</p>
 
+    <!-- 2. ตัวกระดาษใบเสร็จ -->
     <div id="a4Invoice">
         <div class="invoice-header">
             <div class="shop-info">
@@ -158,8 +175,3 @@
         <table class="invoice-table">
             <thead>
                 <tr>
-                    <th style="width: 10%; text-align: center;">ลำดับ</th>
-                    <th style="width: 50%;">รายการบริการ / รายละเอียดอะไหล่</th>
-                    <th style="width: 15%; text-align: right;">ราคา</th>
-                    <th style="width: 10%; text-align: center;">จำนวน</th>
-                    
