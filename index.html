@@ -9,10 +9,22 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; padding: 12px; display: flex; justify-content: center; align-items: start; min-height: 100vh; }
         .app-container { width: 100%; max-width: 460px; background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; }
+        
         .header { text-align: center; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         .logo-title { font-size: 26px; font-weight: 800; color: #0284c7; }
         .logo-sub { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
         .tagline { font-size: 11px; color: #0284c7; background: #e0f2fe; display: inline-block; padding: 4px 12px; border-radius: 20px; margin-top: 5px; font-weight: bold; }
+        
+        /* ระบบแท็บ */
+        .tabs-container { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; }
+        .tab-btn { flex: 1; padding: 10px; background: #f1f5f9; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; font-size: 12px; color: #64748b; transition: all 0.3s; }
+        .tab-btn.active { background: #0284c7; color: white; }
+        .tab-btn:hover { background: #e0f2fe; }
+        .tab-btn.active:hover { background: #0284c7; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
         .card-section { background: #f8fafc; border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
         .section-title { font-size: 12px; color: #0369a1; font-weight: 700; margin-bottom: 8px; border-left: 4px solid #0284c7; padding-left: 6px; }
         .form-group { margin-bottom: 8px; }
@@ -20,7 +32,7 @@
         
         /* ช่องกรอกข้อมูล ตัวหนังสือสีดำเข้มคมชัด 100% ไม่จมหาย */
         input, select { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; color: #000000 !important; font-size: 14px; font-weight: 500; appearance: none; }
-        input:focus, select:focus { outline: none; border-color: #0284c7; }
+        input:focus, select:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
         
         /* แถวรายการซ่อมแบบแบ่งครึ่งจอ 50/50 ป้องกันราคาตกขอบ */
         .item-row-card { background: #ffffff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #cbd5e1; position: relative; }
@@ -29,26 +41,34 @@
         .btn-delete:hover { background: #fca5a5; }
         
         /* ปุ่มคำสั่งต่างๆ */
-        .btn-primary { width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); transition: all 0.3s ease; }
-        .btn-primary:hover { background: #0369a1; transform: translateY(-2px); }
+        .btn-primary { width: 100%; background: #0284c7; color: #ffffff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); transition: all 0.3s; }
+        .btn-primary:hover { background: #0369a1; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
         .btn-primary:active { transform: scale(0.96); background: #0369a1; }
-        .btn-secondary { width: 100%; background: #ffffff; color: #0284c7; border: 1px solid #0284c7; border-radius: 8px; padding: 8px; margin-top: 4px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        
+        .btn-secondary { width: 100%; background: #ffffff; color: #0284c7; border: 1px solid #0284c7; border-radius: 8px; padding: 8px; margin-top: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-secondary:hover { background: #e0f2fe; }
+        
+        .btn-small { background: #10b981; color: white; padding: 8px 12px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.3s; margin: 4px 4px 4px 0; display: inline-block; }
+        .btn-small:hover { background: #059669; }
+        .btn-small.danger { background: #dc2626; }
+        .btn-small.danger:hover { background: #b91c1c; }
+        
+        .btn-group { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         
         .summary-box { display: flex; flex-direction: column; gap: 6px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #334155; }
-        .summary-row input { width: 80px; padding: 5px; margin: 0; }
+        .summary-row input { width: 100px; padding: 5px; margin: 0; }
         .total-row { font-size: 18px; color: #b45309; font-weight: 800; border-top: 2px solid #e2e8f0; padding-top: 6px; }
 
         /* หน้าต่างป๊อปอัพสลิปใบเสร็จ */
-        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start; padding: 20px; overflow-y: auto; }
+        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: start; padding: 20px 0; overflow-y: auto; }
         .modal-content { background: #ffffff; padding: 16px; border-radius: 12px; width: 100%; max-width: 400px; margin: auto; color: #000000; }
         .close-modal-btn { background: #dc2626; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
         .close-modal-btn:hover { background: #b91c1c; }
         
         .receipt-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
         .receipt-table th { background: #f1f5f9; padding: 6px; border: 1px solid #cbd5e1; text-align: left; color: #000; font-weight: 600; }
-        .receipt-table td { padding: 6px; border: 1px solid #cbd5e1; color: #000; }
+        .receipt-table td { padding: 6px; border: 1px solid #cbd5e1; color: #000; word-break: break-word; }
         .receipt-table .text-right { text-align: right; }
         
         .receipt-divider { border-top: 2px solid #cbd5e1; margin: 8px 0; }
@@ -66,11 +86,27 @@
         .bank-info { background: #e0f2fe; border-left: 4px solid #0284c7; padding: 10px; margin: 10px 0; border-radius: 4px; font-size: 11px; }
         .bank-info div { margin: 3px 0; }
         
+        /* สำหรับแสดงประวัติ */
+        .history-list { max-height: 500px; overflow-y: auto; }
+        .history-item { background: #f8fafc; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 4px solid #0284c7; cursor: pointer; transition: all 0.3s; }
+        .history-item:hover { background: #e0f2fe; }
+        .history-item-date { font-size: 10px; color: #64748b; }
+        .history-item-name { font-size: 13px; font-weight: 600; color: #0284c7; }
+        .history-item-amount { font-size: 12px; color: #334155; }
+        
+        .info-box { background: #e0f2fe; border-left: 4px solid #0284c7; padding: 10px; border-radius: 4px; font-size: 12px; color: #0369a1; margin-bottom: 12px; }
+        
         @media print {
             body { background: white; }
-            .preview-modal { background: white; display: block !important; position: static; }
+            .preview-modal { background: white; display: flex !important; position: static; }
             .modal-content { box-shadow: none; border: none; }
             .close-modal-btn, .print-button { display: none; }
+        }
+        
+        @media (max-width: 480px) {
+            .app-container { padding: 12px; }
+            .tabs-container { gap: 4px; }
+            .tab-btn { font-size: 11px; padding: 8px; }
         }
     </style>
 </head>
@@ -84,88 +120,166 @@
             <div class="tagline">รับซ่อมในสุรินทร์ ทุกอำเภอ • 063-671-8151</div>
         </div>
 
-        <!-- รหัสบิลและวันที่ -->
-        <div class="card-section">
-            <div class="form-group">
-                <label>เลขที่บิล / No.</label>
-                <input type="text" id="billNo" value="INV-202607001">
-            </div>
-            <div class="form-group">
-                <label>วันที่ออกบิล / Date</label>
-                <input type="date" id="billDate">
-            </div>
+        <!-- ระบบแท็บ -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('form-tab')">📝 ฟอร์ม</button>
+            <button class="tab-btn" onclick="switchTab('history-tab')">📋 ประวัติ</button>
+            <button class="tab-btn" onclick="switchTab('settings-tab')">⚙️ ตั้งค่า</button>
         </div>
 
-        <!-- ส่วนข้อมูลลูกค้า -->
-        <div class="card-section">
-            <div class="section-title">ข้อมูลลูกค้า (CUSTOMER INFO)</div>
-            <div class="form-group"><input type="text" id="custName" placeholder="ชื่อ-นามสกุล ลูกค้า"></div>
-            <div class="form-group"><input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์ลูกค้า"></div>
-            <div class="form-group">
-                <select id="custDistrict">
-                    <option value="" disabled selected>-- เลือกอำเภอในสุรินทร์ --</option>
-                    <option value="เมืองสุรินทร์">เมืองสุรินทร์</option>
-                    <option value="สังขะ">สังขะ</option>
-                    <option value="ปราสาท">ปราสาท</option>
-                    <option value="ท่าตูม">ท่าตูม</option>
-                    <option value="ศีขรภูมิ">ศีขรภูมิ</option>
-                    <option value="รัตนบุรี">รัตนบุรี</option>
-                    <option value="จอมพระ">จอมพระ</option>
-                    <option value="กาบเชิง">กาบเชิง</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
-                </select>
+        <!-- TAB 1: ฟอร์มสร้างใบเสร็จ -->
+        <div id="form-tab" class="tab-content active">
+            
+            <!-- รหัสบิลและวันที่ -->
+            <div class="card-section">
+                <div class="form-group">
+                    <label>เลขที่บิล / No.</label>
+                    <input type="text" id="billNo" value="INV-202607001">
+                </div>
+                <div class="form-group">
+                    <label>วันที่ออกบิล / Date</label>
+                    <input type="date" id="billDate">
+                </div>
             </div>
-        </div>
 
-        <!-- ส่วนตัวเครื่องอุปกรณ์ -->
-        <div class="card-section">
-            <div class="section-title">ข้อมูลตัวเครื่อง (DEVICE INFO)</div>
-            <div class="form-group">
-                <select id="deviceType">
-                    <option>TV REPAIR (ซ่อมทีวี)</option>
-                    <option>WASHING MACHINE (เครื่องซักผ้า)</option>
-                    <option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
-                    <option>A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
-                    <option>FAN REPAIR (ซ่อมพัดลม)</option>
-                </select>
+            <!-- ส่วนข้อมูลลูกค้า -->
+            <div class="card-section">
+                <div class="section-title">ข้อมูลลูกค้า (CUSTOMER INFO)</div>
+                <div class="form-group"><input type="text" id="custName" placeholder="ชื่อ-นามสกุล ลูกค้า"></div>
+                <div class="form-group"><input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์ลูกค้า"></div>
+                <div class="form-group">
+                    <select id="custDistrict">
+                        <option value="" disabled selected>-- เลือกอำเภอในสุรินทร์ --</option>
+                        <option value="เมืองสุรินทร์">เมืองสุรินทร์</option>
+                        <option value="สังขะ">สังขะ</option>
+                        <option value="ปราสาท">ปราสาท</option>
+                        <option value="ท่าตูม">ท่าตูม</option>
+                        <option value="ศีขรภูมิ">ศีขรภูมิ</option>
+                        <option value="รัตนบุรี">รัตนบุรี</option>
+                        <option value="จอมพระ">จอมพระ</option>
+                        <option value="กาบเชิง">กาบเชิง</option>
+                        <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group"><input type="text" id="deviceModel" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG"></div>
-            <div class="form-group"><input type="text" id="deviceSymptom" placeholder="อาการเสียที่ช่างตรวจพบ"></div>
-        </div>
 
-        <!-- รายการอะไหล่และค่าแรง -->
-        <div class="card-section">
-            <div class="section-title">รายการอะไหล่และค่าบริการ (REPAIR ITEMS)</div>
-            <div id="itemsContainer">
-                <div class="item-row-card">
-                    <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
-                    <input type="text" placeholder="เช่น เปลี่ยนแคป, ค่าล้างแอร์ด่วน" class="item-name">
-                    <div class="item-grid">
-                        <div>
-                            <label>จำนวน</label>
-                            <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
-                        </div>
-                        <div>
-                            <label>ราคา (บาท)</label>
-                            <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
+            <!-- ส่วนตัวเครื่องอุปกรณ์ -->
+            <div class="card-section">
+                <div class="section-title">ข้อมูลตัวเครื่อง (DEVICE INFO)</div>
+                <div class="form-group">
+                    <select id="deviceType">
+                        <option>TV REPAIR (ซ่อมทีวี)</option>
+                        <option>WASHING MACHINE (เครื่องซักผ้า)</option>
+                        <option>FRIDGE REPAIR (ซ่อมตู้เย็น)</option>
+                        <option>A/C REPAIR & SERVICE (ล้าง/ซ่อมแอร์)</option>
+                        <option>FAN REPAIR (ซ่อมพัดลม)</option>
+                    </select>
+                </div>
+                <div class="form-group"><input type="text" id="deviceModel" placeholder="ยี่ห้อ / รุ่น เช่น SAMSUNG, LG"></div>
+                <div class="form-group"><input type="text" id="deviceSymptom" placeholder="อาการเสียที่ช่างตรวจพบ"></div>
+            </div>
+
+            <!-- รายการอะไหล่และค่าแรง -->
+            <div class="card-section">
+                <div class="section-title">รายการอะไหล่และค่าบริการ (REPAIR ITEMS)</div>
+                <div id="itemsContainer">
+                    <div class="item-row-card">
+                        <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
+                        <input type="text" placeholder="เช่น เปลี่ยนแคป, ค่าล้างแอร์ด่วน" class="item-name">
+                        <div class="item-grid">
+                            <div>
+                                <label>จำนวน</label>
+                                <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
+                            </div>
+                            <div>
+                                <label>ราคา (บาท)</label>
+                                <input type="number" value="0" min="0" step="0.01" class="item-price" oninput="calculateTotal()">
+                            </div>
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn-secondary" onclick="addItemRow()">+ เพิ่มรายการซ่อม/อะไหล่ใหม่</button>
             </div>
-            <button type="button" class="btn-secondary" onclick="addItemRow()">+ เพิ่มรายการซ่อม/อะไหล่ใหม่</button>
+
+            <!-- คอลัมน์คำนวณเงิน -->
+            <div class="card-section">
+                <div class="summary-box">
+                    <div class="summary-row"><span>รวมเงิน (Sub Total)</span><span id="txtSubTotal" style="font-weight: 600;">0.00 บาท</span></div>
+                    <div class="summary-row"><span>ส่วนลด (Discount)</span><input type="number" id="inputDiscount" value="0" min="0" step="0.01" oninput="calculateTotal()" style="width: 100px; padding: 5px;"></div>
+                    <div class="summary-row total-row"><span>ยอดสุทธิที่ต้องจ่าย</span><span id="txtGrandTotal">0.00 บาท</span></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <button type="button" class="btn-primary" onclick="processInvoiceNow()">✨ ออกใบเสร็จรับเงินสำเร็จรูป</button>
+                <div class="btn-group">
+                    <button type="button" class="btn-small" onclick="saveCurrentData()">💾 บันทึกชั่วคราว</button>
+                    <button type="button" class="btn-small" onclick="clearFormData()">🗑️ ล้างฟอร์ม</button>
+                    <button type="button" class="btn-small" onclick="generateNewBill()">📄 ใบเสร็จใหม่</button>
+                </div>
+            </div>
         </div>
 
-        <!-- คอลัมน์คำนวณเงิน -->
-        <div class="card-section">
-            <div class="summary-box">
-                <div class="summary-row"><span>รวมเงิน (Sub Total)</span><span id="txtSubTotal" style="font-weight: 600;">0.00 บาท</span></div>
-                <div class="summary-row"><span>ส่วนลด (Discount)</span><input type="number" id="inputDiscount" value="0" min="0" oninput="calculateTotal()" style="width: 100px; padding: 5px;"></div>
-                <div class="summary-row total-row"><span>ยอดสุทธิที่ต้องจ่าย</span><span id="txtGrandTotal">0.00 บาท</span></div>
+        <!-- TAB 2: ประวัติใบเสร็จ -->
+        <div id="history-tab" class="tab-content">
+            <div class="info-box">
+                📊 ประวัติใบเสร็จทั้งหมด (<span id="historyCount">0</span> รายการ)
+            </div>
+            <div id="historyList" class="history-list">
+                <p style="text-align: center; color: #94a3b8; padding: 20px;">ยังไม่มีประวัติ</p>
+            </div>
+            <div class="btn-group" style="margin-top: 12px;">
+                <button type="button" class="btn-small" onclick="exportHistoryToJSON()">📥 ส่งออก JSON</button>
+                <button type="button" class="btn-small" onclick="exportHistoryToCSV()">📊 ส่งออก CSV</button>
+                <button type="button" class="btn-small danger" onclick="clearAllHistory()">🗑️ ล้างประวัติ</button>
             </div>
         </div>
 
-        <div style="margin-top: 15px;">
-            <button type="button" class="btn-primary" onclick="processInvoiceNow()">✨ ออกใบเสร็จรับเงินสำ��ร็จรูป</button>
+        <!-- TAB 3: ตั้งค่า -->
+        <div id="settings-tab" class="tab-content">
+            <div class="info-box">
+                ⚙️ ตั้งค่าและข้อมูลธนาคาร
+            </div>
+            
+            <div class="card-section">
+                <div class="section-title">ข้อมูลธนาคาร</div>
+                <div class="form-group">
+                    <label>ชื่อธนาคาร</label>
+                    <input type="text" id="bankName" value="กรุงไทย">
+                </div>
+                <div class="form-group">
+                    <label>เลขที่บัญชี</label>
+                    <input type="text" id="bankAccount" value="6629442520">
+                </div>
+                <div class="form-group">
+                    <label>ชื่อบัญชี</label>
+                    <input type="text" id="bankAccountName" value="นายประสงค์ นันตะบุตร">
+                </div>
+            </div>
+
+            <div class="card-section">
+                <div class="section-title">ข้อมูลอื่นๆ</div>
+                <div class="form-group">
+                    <label>เบอร์โทรศัพท์</label>
+                    <input type="text" id="phoneNumber" value="063-671-8151">
+                </div>
+                <div class="form-group">
+                    <label>ข้อความหลังใบเสร็จ</label>
+                    <input type="text" id="footerMessage" value="สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้">
+                </div>
+            </div>
+
+            <div class="btn-group" style="margin-top: 12px;">
+                <button type="button" class="btn-small" onclick="saveSettings()">💾 บันทึกตั้งค่า</button>
+                <button type="button" class="btn-small danger" onclick="resetSettings()">🔄 รีเซ็ตเริ่มต้น</button>
+            </div>
+
+            <div class="info-box" style="margin-top: 16px;">
+                <div><strong>ℹ️ ข้อมูลระบบ</strong></div>
+                <div>เวอร์ชัน: 2.0</div>
+                <div>โครงเก็บข้อมูล: LocalStorage</div>
+                <div id="storageInfo"></div>
+            </div>
         </div>
     </div>
 
@@ -175,7 +289,7 @@
             <div style="text-align:center; margin-bottom:10px;">
                 <h2 style="font-size:24px; color:#0284c7; margin:0;">T&K</h2>
                 <span style="font-size:9px; font-weight:bold; color:#475569; display:block;">ELECTRICAL APPLIANCE REPAIR CENTER</span>
-                <span style="font-size:11px; display:block; margin-top:2px;">รับซ่อมในสุรินทร์ ทุกอำเภอ • โทร. 063-671-8151</span>
+                <span style="font-size:11px; display:block; margin-top:2px;">รับซ่อมในสุรินทร์ ทุกอำเภอ • โทร. <span id="rcptPhone">063-671-8151</span></span>
             </div>
             
             <h3 style="background:#0284c7; color:#fff; text-align:center; padding:4px; font-size:14px; margin-bottom:10px; border-radius:4px;">ใบเสร็จรับเงิน / ใบแจ้งหนี้</h3>
@@ -238,16 +352,16 @@
             <!-- ข้อมูลธนาคาร -->
             <div class="bank-info">
                 <div><strong>💳 ข้อมูลการโอนเงิน:</strong></div>
-                <div>ธนาคาร: กรุงไทย</div>
-                <div>เลขที่บัญชี: 6629442520</div>
-                <div>ชื่อบัญชี: นายประสงค์ นันตะบุตร</div>
+                <div>ธนาคาร: <span id="rcptBankName">กรุงไทย</span></div>
+                <div>เลขที่บัญชี: <span id="rcptBankAccount">6629442520</span></div>
+                <div>ชื่อบัญชี: <span id="rcptBankAccountName">นายประสงค์ นันตะบุตร</span></div>
             </div>
 
             <!-- ส่วนท้ายเอกสาร -->
             <div style="text-align: center; font-size: 10px; color: #64748b; margin-top: 12px; padding-top: 10px; border-top: 1px solid #cbd5e1;">
                 <p style="margin: 4px 0;">ขอบคุณที่ใช้บริการ T&K Electrical Repair</p>
                 <p style="margin: 4px 0;">Thank you for using our service</p>
-                <p style="margin: 4px 0; font-weight: 600;">สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้</p>
+                <p style="margin: 4px 0; font-weight: 600;" id="rcptFooterMessage">สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้</p>
             </div>
 
             <!-- พื้นที่เซ็นต์และตราประทับ -->
@@ -272,13 +386,384 @@
     </div>
 
     <script>
-        // ตั้งค่าวันที่ปัจจุบันเมื่อโหลดหน้า
-        window.addEventListener('DOMContentLoaded', function() {
+        // ========================
+        // 🔧 ตัวแปรทั่วไป
+        // ========================
+        const STORAGE_KEY = 'tk_repair_app_data';
+        const HISTORY_KEY = 'tk_repair_app_history';
+        const SETTINGS_KEY = 'tk_repair_app_settings';
+
+        // ========================
+        // 🎯 ระบบแท็บ
+        // ========================
+        function switchTab(tabName) {
+            // ซ่อนแท็บทั้งหมด
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // ลบ active จากปุ่มทั้งหมด
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // แสดงแท็บที่เลือก
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // อัพเดตประวัติเมื่อเปิดแท็บ
+            if (tabName === 'history-tab') {
+                displayHistory();
+            }
+            // อัพเดตข้อมูล Storage เมื่อเปิดแท็บตั้งค่า
+            if (tabName === 'settings-tab') {
+                updateStorageInfo();
+            }
+        }
+
+        // ========================
+        // 💾 ระบบ LocalStorage
+        // ========================
+        function saveCurrentData() {
+            const data = {
+                billNo: document.getElementById('billNo').value,
+                billDate: document.getElementById('billDate').value,
+                custName: document.getElementById('custName').value,
+                custPhone: document.getElementById('custPhone').value,
+                custDistrict: document.getElementById('custDistrict').value,
+                deviceType: document.getElementById('deviceType').value,
+                deviceModel: document.getElementById('deviceModel').value,
+                deviceSymptom: document.getElementById('deviceSymptom').value,
+                discount: document.getElementById('inputDiscount').value,
+                items: [],
+                timestamp: new Date().toISOString()
+            };
+
+            document.querySelectorAll('.item-row-card').forEach(item => {
+                data.items.push({
+                    name: item.querySelector('.item-name').value,
+                    qty: item.querySelector('.item-qty').value,
+                    price: item.querySelector('.item-price').value
+                });
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            alert('✅ บันทึกข้อมูลชั่วคราวแล้ว');
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+            document.getElementById('billNo').value = data.billNo || '';
+            document.getElementById('billDate').value = data.billDate || '';
+            document.getElementById('custName').value = data.custName || '';
+            document.getElementById('custPhone').value = data.custPhone || '';
+            document.getElementById('custDistrict').value = data.custDistrict || '';
+            document.getElementById('deviceType').value = data.deviceType || '';
+            document.getElementById('deviceModel').value = data.deviceModel || '';
+            document.getElementById('deviceSymptom').value = data.deviceSymptom || '';
+            document.getElementById('inputDiscount').value = data.discount || '0';
+
+            // ล้างรายการเดิม
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            // โหลดรายการจากที่บันทึก
+            if (data.items && data.items.length > 0) {
+                data.items.forEach((item, index) => {
+                    if (index === 0) {
+                        // เก้าอี้แถวแรก
+                        const firstRow = container.querySelector('.item-row-card');
+                        if (firstRow) {
+                            firstRow.querySelector('.item-name').value = item.name;
+                            firstRow.querySelector('.item-qty').value = item.qty;
+                            firstRow.querySelector('.item-price').value = item.price;
+                        }
+                    } else {
+                        addItemRow();
+                        const lastRow = container.lastChild;
+                        lastRow.querySelector('.item-name').value = item.name;
+                        lastRow.querySelector('.item-qty').value = item.qty;
+                        lastRow.querySelector('.item-price').value = item.price;
+                    }
+                });
+            }
+
+            calculateTotal();
+        }
+
+        function clearFormData() {
+            if (!confirm('🤔 คุณแน่ใจหรือว่าต้องการล้างข้อมูลฟอร์ม?')) return;
+            
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custDistrict').value = '';
+            document.getElementById('deviceType').value = 'TV REPAIR (ซ่อมทีวี)';
+            document.getElementById('deviceModel').value = '';
+            document.getElementById('deviceSymptom').value = '';
+            document.getElementById('inputDiscount').value = '0';
+
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = `
+                <div class="item-row-card">
+                    <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
+                    <input type="text" placeholder="เช่น เปลี่ยนแคป, ค่าล้างแอร์ด่วน" class="item-name">
+                    <div class="item-grid">
+                        <div>
+                            <label>จำนวน</label>
+                            <input type="number" value="1" min="1" class="item-qty" oninput="calculateTotal()">
+                        </div>
+                        <div>
+                            <label>ราคา (บาท)</label>
+                            <input type="number" value="0" min="0" step="0.01" class="item-price" oninput="calculateTotal()">
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            calculateTotal();
+            alert('✅ ล้างฟอร์มแล้ว');
+        }
+
+        function generateNewBill() {
+            const lastBill = document.getElementById('billNo').value;
+            const match = lastBill.match(/(\d+)$/);
+            if (match) {
+                const newNum = parseInt(match[1]) + 1;
+                const newBill = lastBill.replace(/\d+$/, newNum.toString().padStart(match[1].length, '0'));
+                document.getElementById('billNo').value = newBill;
+            }
+            
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('billDate').value = today;
-        });
+            
+            alert('✅ สร้างใบเสร็จใหม่แล้ว');
+        }
 
-        // ฟังก์ชันเพิ่มรา��การซ่อมใหม่
+        // ========================
+        // 📝 ประวัติใบเสร็จ
+        // ========================
+        function saveToHistory() {
+            const custName = document.getElementById('custName').value.trim();
+            const subTotal = parseFloat(document.getElementById('txtSubTotal').textContent) || 0;
+            const discount = parseFloat(document.getElementById('inputDiscount').value) || 0;
+            const grandTotal = subTotal - discount;
+
+            const historyItem = {
+                billNo: document.getElementById('billNo').value,
+                billDate: document.getElementById('billDate').value,
+                custName: custName,
+                custPhone: document.getElementById('custPhone').value,
+                custDistrict: document.getElementById('custDistrict').value,
+                deviceType: document.getElementById('deviceType').value,
+                deviceModel: document.getElementById('deviceModel').value,
+                deviceSymptom: document.getElementById('deviceSymptom').value,
+                items: [],
+                subTotal: subTotal,
+                discount: discount,
+                grandTotal: grandTotal,
+                timestamp: new Date().toISOString()
+            };
+
+            document.querySelectorAll('.item-row-card').forEach(item => {
+                const name = item.querySelector('.item-name').value.trim();
+                if (name) {
+                    historyItem.items.push({
+                        name: name,
+                        qty: parseFloat(item.querySelector('.item-qty').value) || 0,
+                        price: parseFloat(item.querySelector('.item-price').value) || 0
+                    });
+                }
+            });
+
+            let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            history.unshift(historyItem);
+            history = history.slice(0, 100); // เก็บเฉพาะ 100 รายการล่าสุด
+
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        }
+
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            const historyList = document.getElementById('historyList');
+            document.getElementById('historyCount').textContent = history.length;
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 20px;">ยังไม่มีประวัติ</p>';
+                return;
+            }
+
+            historyList.innerHTML = history.map((item, index) => {
+                const date = new Date(item.timestamp).toLocaleDateString('th-TH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <div class="history-item" onclick="loadHistoryItem(${index})">
+                        <div class="history-item-date">${date}</div>
+                        <div class="history-item-name">${item.custName} (${item.billNo})</div>
+                        <div class="history-item-amount">${item.deviceType} - ฿${item.grandTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadHistoryItem(index) {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            const item = history[index];
+            if (!item) return;
+
+            // สลับไปแท็บฟอร์ม
+            document.getElementById('form-tab').classList.add('active');
+            document.getElementById('history-tab').classList.remove('active');
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+
+            // โหลดข้อมูล
+            document.getElementById('billNo').value = item.billNo;
+            document.getElementById('billDate').value = item.billDate;
+            document.getElementById('custName').value = item.custName;
+            document.getElementById('custPhone').value = item.custPhone;
+            document.getElementById('custDistrict').value = item.custDistrict;
+            document.getElementById('deviceType').value = item.deviceType;
+            document.getElementById('deviceModel').value = item.deviceModel;
+            document.getElementById('deviceSymptom').value = item.deviceSymptom;
+            document.getElementById('inputDiscount').value = item.discount;
+
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            item.items.forEach((itemData, i) => {
+                if (i === 0) {
+                    const firstRow = document.createElement('div');
+                    firstRow.className = 'item-row-card';
+                    firstRow.innerHTML = `
+                        <label style="font-size: 11px; color:#64748b; font-weight:600;">ชื่ออะไหล่ / รายการบริการ</label>
+                        <input type="text" placeholder="เช่น เปลี่ยนแคป, ค่าล้างแอร์ด่วน" class="item-name" value="${itemData.name}">
+                        <div class="item-grid">
+                            <div>
+                                <label>จำนวน</label>
+                                <input type="number" value="${itemData.qty}" min="1" class="item-qty" oninput="calculateTotal()">
+                            </div>
+                            <div>
+                                <label>ราคา (บาท)</label>
+                                <input type="number" value="${itemData.price}" min="0" step="0.01" class="item-price" oninput="calculateTotal()">
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(firstRow);
+                } else {
+                    addItemRow();
+                    const lastRow = container.lastChild;
+                    lastRow.querySelector('.item-name').value = itemData.name;
+                    lastRow.querySelector('.item-qty').value = itemData.qty;
+                    lastRow.querySelector('.item-price').value = itemData.price;
+                }
+            });
+
+            calculateTotal();
+        }
+
+        function exportHistoryToJSON() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            if (history.length === 0) {
+                alert('⚠️ ไม่มีประวัติให้ส่งออก');
+                return;
+            }
+
+            const dataStr = JSON.stringify(history, null, 2);
+            downloadFile(dataStr, `history-${new Date().getTime()}.json`, 'application/json');
+        }
+
+        function exportHistoryToCSV() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            if (history.length === 0) {
+                alert('⚠️ ไม่มีประวัติให้ส่งออก');
+                return;
+            }
+
+            let csv = 'เลขที่บิล,วันที่,ชื่อลูกค้า,เบอร์โทร,อำเภอ,ประเภท,ยี่ห้อ,อาการเสีย,รวมเงิน,ส่วนลด,ยอดสุทธิ,รายการ\n';
+
+            history.forEach(item => {
+                const itemNames = item.items.map(i => i.name).join('; ');
+                const date = new Date(item.timestamp).toLocaleDateString('th-TH');
+                csv += `"${item.billNo}","${date}","${item.custName}","${item.custPhone}","${item.custDistrict}","${item.deviceType}","${item.deviceModel}","${item.deviceSymptom}",${item.subTotal},${item.discount},${item.grandTotal},"${itemNames}"\n`;
+            });
+
+            downloadFile(csv, `history-${new Date().getTime()}.csv`, 'text/csv;charset=utf-8;');
+        }
+
+        function clearAllHistory() {
+            if (!confirm('⚠️ คุณแน่ใจหรือว่าต้องการลบประวัติทั้งหมด? ไม่สามารถกู้คืนได้')) return;
+            localStorage.removeItem(HISTORY_KEY);
+            displayHistory();
+            alert('✅ ล้างประวัติแล้ว');
+        }
+
+        function downloadFile(content, filename, type) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([content], { type }));
+            a.download = filename;
+            a.click();
+        }
+
+        // ========================
+        // ⚙️ ตั้งค่า
+        // ========================
+        function saveSettings() {
+            const settings = {
+                bankName: document.getElementById('bankName').value,
+                bankAccount: document.getElementById('bankAccount').value,
+                bankAccountName: document.getElementById('bankAccountName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                footerMessage: document.getElementById('footerMessage').value
+            };
+
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            alert('✅ บันทึกตั้งค่าแล้ว');
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+
+            document.getElementById('bankName').value = settings.bankName || 'กรุงไทย';
+            document.getElementById('bankAccount').value = settings.bankAccount || '6629442520';
+            document.getElementById('bankAccountName').value = settings.bankAccountName || 'นายประสงค์ นันตะบุตร';
+            document.getElementById('phoneNumber').value = settings.phoneNumber || '063-671-8151';
+            document.getElementById('footerMessage').value = settings.footerMessage || 'สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้';
+        }
+
+        function resetSettings() {
+            if (!confirm('🤔 คุณแน่ใจหรือว่าต้องการรีเซ็ตตั้งค่าเป็นค่าเริ่มต้น?')) return;
+            localStorage.removeItem(SETTINGS_KEY);
+            loadSettings();
+            alert('✅ รีเซ็ตตั้งค่าแล้ว');
+        }
+
+        function updateStorageInfo() {
+            let used = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    used += localStorage[key].length + key.length;
+                }
+            }
+
+            const usedKB = (used / 1024).toFixed(2);
+            const limit = 5120; // 5MB
+            const usage = (used / (limit * 1024) * 100).toFixed(1);
+
+            document.getElementById('storageInfo').innerHTML = `
+                <div>ใช้พื้นที่: ${usedKB} KB / ${limit} KB (${usage}%)</div>
+            `;
+        }
+
+        // ========================
+        // 🧮 การคำนวณ
+        // ========================
         function addItemRow() {
             const container = document.getElementById('itemsContainer');
             const newRow = document.createElement('div');
@@ -294,7 +779,7 @@
                     </div>
                     <div>
                         <label>ราคา (บาท)</label>
-                        <input type="number" value="0" min="0" class="item-price" oninput="calculateTotal()">
+                        <input type="number" value="0" min="0" step="0.01" class="item-price" oninput="calculateTotal()">
                     </div>
                 </div>
             `;
@@ -302,7 +787,6 @@
             calculateTotal();
         }
 
-        // ฟังก์ชันคำนวณรวมเงิน
         function calculateTotal() {
             const items = document.querySelectorAll('.item-row-card');
             let subTotal = 0;
@@ -314,19 +798,20 @@
             });
 
             const discount = parseFloat(document.getElementById('inputDiscount').value) || 0;
-            const grandTotal = subTotal - discount;
+            const grandTotal = Math.max(0, subTotal - discount);
 
             // อัปเดตการแสดงผล
             document.getElementById('txtSubTotal').textContent = formatCurrency(subTotal);
             document.getElementById('txtGrandTotal').textContent = formatCurrency(grandTotal);
         }
 
-        // ฟังก์ชันจัดรูปแบบเงิน
         function formatCurrency(value) {
             return value.toFixed(2) + ' บาท';
         }
 
-        // ฟังก์ชันแสดงใบเสร็จ
+        // ========================
+        // 🖨️ ใบเสร็จ
+        // ========================
         function processInvoiceNow() {
             // ตรวจสอบข้อมูลที่จำเป็น
             const custName = document.getElementById('custName').value.trim();
@@ -340,7 +825,14 @@
             }
 
             const items = document.querySelectorAll('.item-row-card');
-            if (items.length === 0) {
+            let hasItems = false;
+            items.forEach(item => {
+                if (item.querySelector('.item-name').value.trim()) {
+                    hasItems = true;
+                }
+            });
+
+            if (!hasItems) {
                 alert('⚠️ กรุณาเพิ่มรายการซ่อม/อะไหล่อย่างน้อย 1 รายการ');
                 return;
             }
@@ -360,6 +852,9 @@
                 day: 'numeric' 
             });
 
+            // โหลดตั้งค่า
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+
             // อัปเดตข้อมูลที่แสดงในใบเสร็จ
             document.getElementById('rcptBillNo').textContent = billNo;
             document.getElementById('rcptBillDate').textContent = thaiDate;
@@ -369,6 +864,11 @@
             document.getElementById('rcptDeviceType').textContent = deviceType;
             document.getElementById('rcptDeviceModel').textContent = deviceModel;
             document.getElementById('rcptDeviceSymptom').textContent = deviceSymptom;
+            document.getElementById('rcptPhone').textContent = settings.phoneNumber || '063-671-8151';
+            document.getElementById('rcptBankName').textContent = settings.bankName || 'กรุงไทย';
+            document.getElementById('rcptBankAccount').textContent = settings.bankAccount || '6629442520';
+            document.getElementById('rcptBankAccountName').textContent = settings.bankAccountName || 'นายประสงค์ นันตะบุตร';
+            document.getElementById('rcptFooterMessage').textContent = settings.footerMessage || 'สัญญาซ่อมบอก 30 วัน หากมีปัญหาติดต่อเราได้';
 
             // สร้างตารางรายการ
             let itemsTable = '';
@@ -393,18 +893,20 @@
                 }
             });
 
-            const grandTotal = subTotal - discount;
+            const grandTotal = Math.max(0, subTotal - discount);
 
             document.getElementById('rcptItemsTable').innerHTML = itemsTable;
             document.getElementById('rcptSubTotal').textContent = subTotal.toFixed(2) + ' บาท';
             document.getElementById('rcptDiscount').textContent = discount.toFixed(2) + ' บาท';
             document.getElementById('rcptGrandTotal').textContent = grandTotal.toFixed(2) + ' บาท';
 
+            // บันทึกประวัติ
+            saveToHistory();
+
             // แสดงโมดัล
             document.getElementById('previewModal').style.display = 'flex';
         }
 
-        // ฟังก์ชันปิดใบเสร็จ
         function closePreviewModal() {
             document.getElementById('previewModal').style.display = 'none';
         }
@@ -414,6 +916,18 @@
             if (e.target === this) {
                 closePreviewModal();
             }
+        });
+
+        // ========================
+        // 🎬 โหลดหน้า
+        // ========================
+        window.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('billDate').value = today;
+            
+            loadSavedData();
+            loadSettings();
+            calculateTotal();
         });
 
         // คำนวณเงินเมื่อโหลดหน้า
